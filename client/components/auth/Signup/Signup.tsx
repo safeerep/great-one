@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, {useState} from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -7,18 +7,27 @@ import { signupValidationSchema } from '@/models/validationSchemas'
 import { signUpCredentials } from '@/types/user'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import { useDispatch, useSelector } from 'react-redux'
-import { register } from '@/store/actions/userActions/userActions'
+import { register, sendOtp } from '@/store/actions/userActions/userActions'
+import Modal from '../OtpModal/OtpModal'
 
 const Signup = () => {
     const dispatch:any = useDispatch()
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [credentials, setCredentials] = useState<signUpCredentials | null>(null)
+    
     const handleSubmit = (userCredentials: signUpCredentials) => {
-        dispatch(register(userCredentials))
-        .then((response: any) => {
-            redirect('/')
-        }).catch((error: any) => {
-            console.log('something went wrong', error);       
-        })
+        dispatch(sendOtp(userCredentials.email))
+        setCredentials(userCredentials)
+        setIsModalOpen(true);
     }
+
+    const handleOtpModalSubmit = (userData: signUpCredentials | null, otp: number) => {
+        console.log('OTP submitted:', otp);
+        console.log('OTP submitted user', userData);
+        // Close the modal
+        // setIsModalOpen(false);
+
+    };
     return (
         <>
             <div className="flex justify-around w-full min-h-screen items-center">
@@ -87,6 +96,12 @@ const Signup = () => {
                     </main>
                 </div>
             </div>
+            <Modal
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                onModalSubmit={handleOtpModalSubmit} 
+                userData = {credentials}
+            />
         </>
     )
 }

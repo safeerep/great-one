@@ -3,13 +3,15 @@ import { userControllers } from '../../handlers/controllers'
 
 export = ( dependencies: any) => {
     const router = express.Router()
-    const { userSignupController } = userControllers(dependencies)
+    const { sendOtpController, userSignupController, } = userControllers(dependencies)
     
     router.get('/', (req: Request, res: Response) => {
         res.send('its from routes')
     })
 
+    router.post('/send-otp', sendOtpController)
     router.post('/signup', userSignupController)
+
     return router;
 }
 
