@@ -3,7 +3,7 @@ import { otpCollection, IOtpDocument } from '../../index';
 
 
 
-export const createNewUser = async (userCredentials: IUserData) :Promise<IUserData> => {
+export const createNewUser = async (userCredentials: IUserData) :Promise<IUserData | boolean> => {
     try {
         userCredentials.status = true;
         userCredentials.premiumMember = false;
@@ -11,12 +11,11 @@ export const createNewUser = async (userCredentials: IUserData) :Promise<IUserDa
         
         const newUser = await userCollection.create(userCredentials);
         if (newUser) return newUser as IUserData;
-
         else throw new Error ('something went wrong during creating new user')
-    } catch (error) {
-        console.log(`error from creation `, error);
-        
-        throw new Error ('something went wrong during creating new user')
+    } catch (error: any) {
+        // if phone number is already existing;
+        if (error.code === 11000) return false
+        return false;
     }
 };
 
@@ -26,10 +25,10 @@ export const getUserData = async (email: string) => {
     try {   
         const userData = await userCollection.findOne({ email: email})
         if (!userData) return false;
-        return userData;
+        return true;
     } catch (error:any) {
         console.log(`here happened an error \n`, error);
-        return 'something went wrong'
+        return true;
     }
 };
 

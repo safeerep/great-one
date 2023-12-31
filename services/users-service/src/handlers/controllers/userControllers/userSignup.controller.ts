@@ -48,11 +48,16 @@ export = (dependencies: any): any => {
       let existingUser = await findExistingUser_usecase(dependencies).execute(
         userCredentials?.email
       );
-      if (existingUser)
+      if (existingUser) {
+        console.log(`user existing`);
+        
         return res
           .status(409)
           .json({ success: false, message: "email is already taken" });
+      }
     } catch (error) {
+      console.log(`error from checking existing catch`, error);
+      
       return res.json({ success: false, message: "something went wrong" });
     }
     try {
@@ -67,12 +72,13 @@ export = (dependencies: any): any => {
       let newUser = await register_usecase(dependencies).execute(
         userCredentials
       );
-      if (!newUser) throw new Error("something went wrong");
-
-      res.status(201).json({ success: true, newUser });
+      if (!newUser) {
+        return res.json({ success: false, message: 'phone number already existing'})
+      }
+      return res.status(201).json({ success: true, newUser });
     } catch (error) {
       console.log(`here is error`, error);
-      res.status(400).json({ success: false, error });
+      return res.status(400).json({ success: false, error });
     }
   };
 
