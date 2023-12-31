@@ -22,3 +22,11 @@ export interface IUser extends Document {
     takenOn: Date | null;
   };
 }
+
+
+export interface IOtp extends Document {
+  _id: ObjectId;
+  email: String;
+  otp: Number;
+  createdOn: Date;
+}

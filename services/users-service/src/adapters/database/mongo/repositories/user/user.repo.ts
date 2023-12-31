@@ -1,4 +1,6 @@
 import { userCollection, IUserData} from '../../index'
+import { otpCollection, IOtpDocument } from '../../index';
+
 
 
 export const createNewUser = async (userCredentials: IUserData) :Promise<IUserData> => {
@@ -42,5 +44,27 @@ export const userLogin = async (email: string, password: string) :Promise< IUser
 
     return existingUser as IUserData;
 };
+
+export const storeOtp = async (email: string, otp: number):Promise< void > => {
+    try {
+        await otpCollection.create({email, otp})
+    } catch (error: any) {
+        if (error.code === 11000) console.log(`already an otp is there which is not expired`);
+        console.log('something went wrong during saving otp in database');
+    }
+}
+
+
+export const verifyOtp = async (email: string, otp: number):Promise< boolean > => {
+    try {
+        const currentUser = await otpCollection.findOne({ email: email, otp: otp})
+        if (currentUser) return true;
+        return false;
+    } catch (error: any) {
+        return false;
+    }
+}
+
+
 
 
