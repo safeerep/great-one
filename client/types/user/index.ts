@@ -4,3 +4,8 @@ export type signUpCredentials = {
     phone?: number | string,
     password: string
 }
+
+export type signUpCredentialsWithOtp = signUpCredentials & {
+    otp: number
+}
+

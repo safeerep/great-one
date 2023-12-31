@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { signupValidationSchema } from '@/models/validationSchemas'
-import { signUpCredentials } from '@/types/user'
+import { signUpCredentials, signUpCredentialsWithOtp } from '@/types/user'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import { useDispatch, useSelector } from 'react-redux'
 import { register, sendOtp } from '@/store/actions/userActions/userActions'
@@ -17,13 +17,21 @@ const Signup = () => {
     
     const handleSubmit = (userCredentials: signUpCredentials) => {
         dispatch(sendOtp(userCredentials.email))
-        setCredentials(userCredentials)
-        setIsModalOpen(true);
+        .then((data: any) => {
+            console.log(`from send otp called`);
+            console.log(data.payload);
+            setCredentials(userCredentials)
+            setIsModalOpen(true);
+        }).catch(( err: any) => {
+            console.log(`an error occured ${err}`);
+        })
     }
 
-    const handleOtpModalSubmit = (userData: signUpCredentials | null, otp: number) => {
+    const handleOtpModalSubmit = ( userData: signUpCredentials | null, otp: number) => {
         console.log('OTP submitted:', otp);
         console.log('OTP submitted user', userData);
+        const userDataWithOtp: any = { ...userData, otp};
+        dispatch(register(userDataWithOtp))
         // Close the modal
         // setIsModalOpen(false);
 
