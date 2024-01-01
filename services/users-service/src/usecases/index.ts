@@ -1,5 +1,6 @@
 import {
   findExistingUser_usecase,
+  findUserWithPhone_usecase,
   register_usecase,
   login_usecase,
   storeOtp_usecase,
@@ -8,6 +9,7 @@ import {
 
 export {
   findExistingUser_usecase,
+  findUserWithPhone_usecase,
   register_usecase,
   login_usecase,
   storeOtp_usecase,

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import signupValidationSchema from "../../../utils/validators/signup.validator";
+import generateToken from "../../../utils/externalServices/tokenGenerator";
 import bcrypt from "bcrypt";
 
 export = (dependencies: any): any => {
@@ -23,9 +24,6 @@ export = (dependencies: any): any => {
         return res
           .status(401)
           .json({ success: false, message: "otp is not matching" });
-      else {
-        console.log(`ok fine otp`);
-      }
     } catch (error) {
         console.log(error);
         return res.json({ success: false, message: 'something went wrong'})
@@ -75,6 +73,8 @@ export = (dependencies: any): any => {
       if (!newUser) {
         return res.json({ success: false, message: 'phone number already existing'})
       }
+      const token = generateToken(newUser._id);
+      req.session.userJwt = token;
       return res.status(201).json({ success: true, newUser });
     } catch (error) {
       console.log(`here is error`, error);

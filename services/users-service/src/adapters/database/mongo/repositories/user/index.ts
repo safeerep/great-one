@@ -1,9 +1,17 @@
-import { createNewUser, getUserData, userLogin, storeOtp, verifyOtp } from "./user.repo";
+import {
+  createNewUser,
+  getUserData,
+  getUserWithPhone,
+  userLogin,
+  storeOtp,
+  verifyOtp,
+} from "./user.repo";
 
 export = {
   createNewUser,
   getUserData,
+  getUserWithPhone,
   userLogin,
   storeOtp,
-  verifyOtp
+  verifyOtp,
 };

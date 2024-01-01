@@ -1,9 +1,9 @@
 import userSignupController from "./userSignup.controller";
-import sendOtpController from "./sendOtp.controller";
+import sendOtpForSignupController from "./sendOtpForSignup.controller";
 
 export = (dependencies: any) => {
     return {
-        sendOtpController: sendOtpController(dependencies),
+        sendOtpController: sendOtpForSignupController(dependencies),
         userSignupController: userSignupController(dependencies)
     }
 }

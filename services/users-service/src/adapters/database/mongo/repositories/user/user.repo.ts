@@ -32,6 +32,19 @@ export const getUserData = async (email: string) => {
     }
 };
 
+export const getUserWithPhone = async (phone: number) => {
+    console.log(`in repository get userwithphone`);
+    console.log(phone);
+    try {   
+        const userData = await userCollection.findOne({ phone: phone})
+        if (!userData) return false;
+        return true;
+    } catch (error:any) {
+        console.log(`here happened an error \n`, error);
+        return true;
+    }
+};
+
 export const userLogin = async (email: string, password: string) :Promise< IUserData | boolean> => {
         
     const existingUser = await userCollection.findOne({ email: email})

@@ -17,6 +17,14 @@ app.use(cors({
     methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE'],
     credentials: true
 }))
+
+declare module 'express-session' {
+    interface SessionData {
+      userJwt?: string;
+      adminJwt?: string;
+    }
+}
+
 app.use(
     session({
       secret: String(process.env.SESSION_SECRET),
