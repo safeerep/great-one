@@ -8,7 +8,6 @@ import {
 } from "../../usecases";
 
 import { userRepo } from "../../adapters/database/mongo/repositories";
-// import userRepo from "../../adapters/database/mongo/repositories/user/user.repo";
 
 const useCases: any = {
   login_usecase,

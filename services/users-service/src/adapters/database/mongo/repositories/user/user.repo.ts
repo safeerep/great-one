@@ -25,10 +25,10 @@ export const getUserData = async (email: string) => {
     try {   
         const userData = await userCollection.findOne({ email: email})
         if (!userData) return false;
-        return true;
+        return userData;
     } catch (error:any) {
         console.log(`here happened an error \n`, error);
-        return true;
+        return false;
     }
 };
 
@@ -45,15 +45,14 @@ export const getUserWithPhone = async (phone: number) => {
     }
 };
 
-export const userLogin = async (email: string, password: string) :Promise< IUserData | boolean> => {
-        
-    const existingUser = await userCollection.findOne({ email: email})
+export const userLogin = async (email: string, password: string) :Promise< IUserData | boolean> => { 
+    console.log(email);
+    console.log(password);
+    
+    const existingUser = await userCollection.findOne({ email: email, password: password})
+    console.log(`in repo`, existingUser);
+    
     if (!existingUser) return false;
-
-    // const currentPassword: string = String(existingUser.password)
-    // const passwordIsMatching: boolean | void = await bcrypt.compare(currentPassword, password)
-    // if (!passwordIsMatching) return false;
-
     return existingUser as IUserData;
 };
 

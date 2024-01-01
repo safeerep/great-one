@@ -1,12 +1,13 @@
 export const login_usecase = (dependencies: any) => {
-    const { repository: { 
+    
+    const { repositories: { 
         userRepo
     }} = dependencies;
 
-    if (!userRepo) throw new Error('dependency is required for login in userrepository')
+    if (!userRepo) throw new Error('dependency is required for login in user repository')
 
-    const execute = ( email: string, password: string) => {
-        return userRepo.userLogin(email, password)
+    const execute = async ( email: string, password: string) => {
+        return await userRepo.userLogin(email, password)
     }
 
     return { execute }
