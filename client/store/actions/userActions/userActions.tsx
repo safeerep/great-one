@@ -5,7 +5,6 @@ import {USERS_SERVICE_BASE_URL} from '../../../constants/index'
 
 export const register = createAsyncThunk('/user/register', async ( userCredentials: signUpCredentialsWithOtp) => {
     try {
-        
         const response: any = await axios.post(`${USERS_SERVICE_BASE_URL}/user/signup`, { ...userCredentials }, {
             headers: {"Content-Type": "application/json" },
             withCredentials: true
@@ -26,7 +25,7 @@ export const register = createAsyncThunk('/user/register', async ( userCredentia
 
 export const sendOtp = createAsyncThunk('/user/send-otp-for-signup', async ( {email, phone}: {email:string, phone: number}) => {
     try {
-        const response: any = await axios.post(`${USERS_SERVICE_BASE_URL}/user/send-otp`, {email, phone}, {
+        const response: any = await axios.post(`${USERS_SERVICE_BASE_URL}/user/send-otp-for-signup`, {email, phone}, {
             headers: {"Content-Type": "application/json" },
             withCredentials: true
         })
