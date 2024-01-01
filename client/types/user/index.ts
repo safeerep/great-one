@@ -9,3 +9,8 @@ export type signUpCredentialsWithOtp = signUpCredentials & {
     otp: number
 }
 
+export type signInCredentials = {
+    email: string,
+    password: string
+}
+

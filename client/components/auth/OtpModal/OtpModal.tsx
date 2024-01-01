@@ -10,9 +10,10 @@ interface ModalProps {
     userData: signUpCredentials | null;
     onClose: () => void;
     onModalSubmit: (userData:signUpCredentials | null, otp: number) => void;
+    modalError?: string; 
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onModalSubmit, userData }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onModalSubmit, userData, modalError}) => {
     return (
       <>
         {isOpen && (
@@ -29,6 +30,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onModalSubmit, userData 
                 }}
               >
                 <Form>
+                {modalError && (
+                  <div className="text-red-500 text-xs text-start w-full mb-2">{modalError}</div>
+                )}
                   <label>
                     Enter OTP:
                     <Field

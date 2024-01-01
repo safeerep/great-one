@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { register } from "@/store/actions/userActions/userActions";
+import { login, register } from "@/store/actions/userActions/userActions";
 
 const INITIAL_STATE = {
     user: {
@@ -16,7 +16,9 @@ const userSlice = createSlice({
 
     },
     extraReducers: (builder) => {
-        builder.addCase(register.pending, ( state, action) => {
+        builder
+        // signup
+        .addCase(register.pending, ( state, action) => {
             state.user.loading = true;
         })
         .addCase( register.fulfilled, ( state, action) => {
@@ -29,6 +31,21 @@ const userSlice = createSlice({
             state.user.data = null;
             state.user.error = action.error.message;
         })
+        // login
+        .addCase(login.pending, ( state, action) => {
+            state.user.loading = true;
+        })
+        .addCase(login.fulfilled, ( state, action) => {
+            state.user.loading = false;
+            state.user.data = action.payload;
+            state.user.error = null;
+        })
+        .addCase( login.rejected, ( state: any, action) => {
+            state.user.loading = false;
+            state.user.data = null;
+            state.user.error = action.error.message;
+        })
+        
     }
 })
 

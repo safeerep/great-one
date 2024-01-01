@@ -1,8 +1,8 @@
 "use client"
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { signupValidationSchema } from '@/models/validationSchemas'
 import { signUpCredentials, signUpCredentialsWithOtp } from '@/types/user'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
@@ -11,49 +11,76 @@ import { register, sendOtp } from '@/store/actions/userActions/userActions'
 import Modal from '../OtpModal/OtpModal'
 
 const Signup = () => {
-    const dispatch:any = useDispatch()
+    const dispatch: any = useDispatch()
+    const router = useRouter()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [credentials, setCredentials] = useState<signUpCredentials | null>(null)
-    
+    const [error, setError] = useState()
+    const [modalError, setModalError] = useState()
+
     const handleSubmit = (userCredentials: signUpCredentials) => {
-        dispatch(sendOtp(userCredentials.email))
-        .then((data: any) => {
-            console.log(`from send otp called`);
-            console.log(data.payload);
-            setCredentials(userCredentials)
-            setIsModalOpen(true);
-        }).catch(( err: any) => {
-            console.log(`an error occured ${err}`);
-        })
+        dispatch(sendOtp({ email: userCredentials?.email, phone: Number(userCredentials?.phone) }))
+            .then((data: any) => {
+                if (data.payload.success) {
+                    setCredentials(userCredentials)
+                    setIsModalOpen(true);
+                }
+                else {
+                    setError(data.payload.message)
+                }
+            }).catch((err: any) => {
+                console.log(`an error occured ${err}`);
+            })
     }
 
-    const handleOtpModalSubmit = ( userData: signUpCredentials | null, otp: number) => {
-        console.log('OTP submitted:', otp);
-        console.log('OTP submitted user', userData);
-        const userDataWithOtp: any = { ...userData, otp};
+    const handleOtpModalSubmit = (userData: signUpCredentials | null, otp: number) => {
+        const userDataWithOtp: any = { ...userData, otp };
         dispatch(register(userDataWithOtp))
-        // Close the modal
-        // setIsModalOpen(false);
+            .then((data: any) => {
+                console.log('ok hereee');
+                console.log(data);
+
+                if (data.payload.success) {
+                    // close the modal
+                    setIsModalOpen(false);
+                    router.push('/')
+                }
+                else {
+                    // otp is not matching
+                    setModalError(data.payload.message)
+                }
+            }).catch((err: any) => {
+                console.log(`some error happened ${err}`);
+            })
 
     };
     return (
         <>
             <div className="flex justify-around w-full min-h-screen items-center">
-                <div className='p-4 shadow w-2/4'>
-                    <header className='text-center font-bold'>Welcome to EP LINK !!!</header>
-                    <main className="flex justify-between items-center">
-                        <div className='flex justify-center items-center'>
-                            <Image src="/logo/HD-wallpaper-nike-logo-nike-wallpaped-nike-logo-nike-nike-logo-nike.jpg" alt='logo'
-                                width={200} height={200}>
-                            </Image>
-                        </div>
+                <div className='lg:w-1/4 sm:w-full p-4 shadow'
+                >
+                    <div style={{
+
+                        backgroundSize: 'cover',
+                    }} className='w-full h-20 flex justify-center items-center'>
+                        <Image src="/brand.png"
+                            alt='logo'
+                            width={200} height={200}>
+                        </Image>
+                    </div>
+                    <main className="flex justify-center items-center">
+
                         <Formik
                             initialValues={{ userName: "", email: "", phone: "", password: "" }}
                             validationSchema={signupValidationSchema}
                             onSubmit={(userCredentials) => {
                                 handleSubmit(userCredentials);
                             }} >
-                            <Form className='sm:w-full md:w-full lg:w-1/2 flex flex-col items-center px-2'>
+                            <Form className='flex flex-col items-center justify-center'>
+                                {
+                                    error &&
+                                    <p className="text-red-500 text-md text-start">{error}</p>
+                                }
                                 <Field
                                     name="userName"
                                     placeholder='enter your user name'
@@ -105,10 +132,11 @@ const Signup = () => {
                 </div>
             </div>
             <Modal
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                onModalSubmit={handleOtpModalSubmit} 
-                userData = {credentials}
+                modalError={modalError}
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onModalSubmit={handleOtpModalSubmit}
+                userData={credentials}
             />
         </>
     )
