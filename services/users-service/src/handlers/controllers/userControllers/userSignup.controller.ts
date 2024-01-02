@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 
 export = (dependencies: any): any => {
   const {
-    useCases: { findExistingUser_usecase, register_usecase, verifyOtp_usecase },
+    usecases: { findExistingUser_usecase, register_usecase, verifyOtp_usecase },
   } = dependencies;
 
   const registerUser = async (
@@ -74,7 +74,7 @@ export = (dependencies: any): any => {
         return res.json({ success: false, message: 'phone number already existing'})
       }
       const token = generateToken(newUser._id);
-      req.session.userJwt = token;
+      res.cookie( "userJwt", token, { maxAge: 30 * 24 * 60 * 60 * 1000 } )
       return res.status(201).json({ success: true, newUser });
     } catch (error) {
       console.log(`here is error`, error);

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { sendOtp } from "../../../utils/externalServices";
 
 export = ( dependencies: any): any => {
-    const { useCases: {
+    const { usecases: {
         storeOtp_usecase,
         findExistingUser_usecase,
         findUserWithPhone_usecase,

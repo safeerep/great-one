@@ -1,12 +1,12 @@
+import dotenv from 'dotenv'
+dotenv.config()
 import express, { Express, Request, Response} from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
-import dotenv from 'dotenv'
 import { BASE_URL_OF_FRONT_END } from './constants/constants';
 import { routes } from './adapters/routes';
 import dependencies from './utils/config/dependencies';
-dotenv.config()
 const app: Express = express();
 const PORT: number = Number(process.env.PORT) || 3001;
 
@@ -17,13 +17,6 @@ app.use(cors({
     methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE'],
     credentials: true
 }))
-
-declare module 'express-session' {
-    interface SessionData {
-      userJwt?: string;
-      adminJwt?: string;
-    }
-}
 
 app.use(
     session({

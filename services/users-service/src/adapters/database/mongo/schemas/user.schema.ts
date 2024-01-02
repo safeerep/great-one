@@ -26,10 +26,12 @@ const UsersSchema: Schema = new Schema(
     status: {
       type: Boolean,
       required: true,
+      default: true
     },
     premiumMember: {
       type: Boolean,
       required: true,
+      default: false
     },
     favouriteProducts: [
       {

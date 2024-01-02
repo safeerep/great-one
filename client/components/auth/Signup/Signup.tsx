@@ -9,6 +9,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik'
 import { useDispatch, useSelector } from 'react-redux'
 import { register, sendOtp } from '@/store/actions/userActions/userActions'
 import Modal from '../OtpModal/OtpModal'
+import { GOOGLE_AUTH_WINDOW_URL } from '@/constants'
 
 const Signup = () => {
     const dispatch: any = useDispatch()
@@ -37,9 +38,6 @@ const Signup = () => {
         const userDataWithOtp: any = { ...userData, otp };
         dispatch(register(userDataWithOtp))
             .then((data: any) => {
-                console.log('ok hereee');
-                console.log(data);
-
                 if (data.payload.success) {
                     // close the modal
                     setIsModalOpen(false);
@@ -52,8 +50,12 @@ const Signup = () => {
             }).catch((err: any) => {
                 console.log(`some error happened ${err}`);
             })
-
     };
+
+    const handleGoogleAuth = () => {
+        window.open(`${GOOGLE_AUTH_WINDOW_URL}`, "_self");
+    }
+
     return (
         <>
             <div className="flex justify-around w-full min-h-screen items-center">
@@ -122,10 +124,14 @@ const Signup = () => {
                                         <span className='bg-white px-2'>OR</span>
                                     </div>
                                 </div>
-                                <Link className='w-full border border-black p-3 m-1 flex justify-center items-center rounded-md' href='/sign-up-with-google'>
+                                <button
+                                    type='button'
+                                    className='w-full border border-black p-3 m-1 flex justify-center items-center rounded-md'
+                                    onClick={handleGoogleAuth}
+                                >
                                     <Image src='/google-icon.png' width={20} height={20} alt='google icon' />
                                     <span className='font-semibold ps-2'>Sign up with Google</span>
-                                </Link>
+                                </button>
                             </Form>
                         </Formik>
                     </main>

@@ -1,24 +1,36 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { useDispatch, useSelector } from 'react-redux'
 import Image from 'next/image'
 import { signInValidationSchema } from '@/models/validationSchemas'
-import { login } from '@/store/actions/userActions/userActions'
+import { login, checkAuth } from '@/store/actions/userActions/userActions'
 import { signInCredentials } from '@/types/user'
+import { GOOGLE_AUTH_WINDOW_URL } from '@/constants'
 
 const SignIn = () => {
     const dispatch: any = useDispatch();
+    const router = useRouter();
 
+    const handleGoogleAuth = () => {
+        window.open(`${GOOGLE_AUTH_WINDOW_URL}`, "_self");
+    }
+    useEffect(() => {
+        dispatch(checkAuth())
+    }, [])
     const handleSubmit = (userCredentials: signInCredentials) => {
         dispatch(login(userCredentials))
-        .then((data: any) => {
-            console.log(data);
-        })
-        .catch((err: any) => {
-            console.log(`an error happened ${err}`);
-        })
+            .then((data: any) => {
+                console.log(data);
+                if (data.payload.success) {
+                    router.push('/')
+                }
+            })
+            .catch((err: any) => {
+                console.log(`an error happened ${err}`);
+            })
     }
     return (
         <>
@@ -27,7 +39,6 @@ const SignIn = () => {
                 <div className='lg:w-1/4 sm:w-full p-4 shadow'
                 >
                     <div style={{
-
                         backgroundSize: 'cover',
                     }} className='w-full h-20 flex justify-center items-center'>
                         <Image src="/brand.png"
@@ -71,10 +82,14 @@ const SignIn = () => {
                                         <span className='bg-white px-2'>OR</span>
                                     </div>
                                 </div>
-                                <Link className='w-full border border-black p-3 m-1 flex justify-center items-center rounded-md' href='/sign-up-with-google'>
+                                <button
+                                    type='button'
+                                    className='w-full border border-black p-3 m-1 flex justify-center items-center rounded-md'
+                                    onClick={handleGoogleAuth}
+                                >
                                     <Image src='/google-icon.png' width={20} height={20} alt='google icon' />
                                     <span className='font-semibold ps-2'>Continue with Google</span>
-                                </Link>
+                                </button>
                             </Form>
                         </Formik>
                     </main>

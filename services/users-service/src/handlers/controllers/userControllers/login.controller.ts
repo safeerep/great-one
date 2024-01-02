@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 
 export = (dependencies: any): any => {
   const {
-    useCases: { findExistingUser_usecase },
+    usecases: { findExistingUser_usecase },
   } = dependencies;
 
   const login = async (req: Request, res: Response, next: NextFunction) => {
@@ -43,7 +43,7 @@ export = (dependencies: any): any => {
         const isPasswordMatching = await bcrypt.compare(userCredentials.password, existingUser.password);
         if (isPasswordMatching) {
             const token = generateToken(existingUser._id) 
-            req.session.userJwt = token;
+            res.cookie( "userJwt", token, { maxAge: 30 * 24 * 60 * 60 * 1000 })
             return res.status(200).json({ success: true, existingUser, message: 'successfully logged in'})
         }
         else return res.status(401).json({ success: false, message: 'invalid credentials'})

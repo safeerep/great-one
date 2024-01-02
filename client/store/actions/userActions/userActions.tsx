@@ -61,3 +61,22 @@ export const login = createAsyncThunk('/user/login', async ( userCredentials: si
         }
     }
 })
+
+export const checkAuth = createAsyncThunk('/user/check-auth', async () => {
+    try {
+        const response: any = await axios.get(`${USERS_SERVICE_BASE_URL}/user/check-auth`, {
+            headers: {"Content-Type": "application/json" },
+            withCredentials: true
+        })
+        if (response?.data) {
+            console.log('check auth response');
+            console.log(response);
+            return response.data;
+        } else {
+            console.log('in else');
+            throw new Error(response?.data?.message)
+        }
+    } catch (error: any) {
+        console.log('something went wrong', error);
+    }
+})

@@ -2,16 +2,18 @@ import express, { Request, Response, response } from "express";
 import { userControllers } from "../../handlers/controllers";
 import passport from "passport";
 import "../../utils/externalServices/googleAuth";
-// googleStrategy;
 
 export = (dependencies: any) => {
+  
   const router = express.Router();
+
   const {
     sendOtpForSignupController,
     userSignupController,
     loginController,
     googleAuthSucceedController,
     googleAuthFailedController,
+    checkAuthController,
   } = userControllers(dependencies);
 
   router.use(passport.initialize());
@@ -36,6 +38,8 @@ export = (dependencies: any) => {
   );
   router.get("/signin-success", googleAuthSucceedController);
   router.get("/signin-failure", googleAuthFailedController);
+
+  router.get("/check-auth", checkAuthController)
 
   return router;
 };

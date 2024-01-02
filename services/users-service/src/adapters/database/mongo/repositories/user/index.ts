@@ -1,6 +1,7 @@
 import {
   createNewUser,
   getUserData,
+  getUserDataFromId,
   getUserWithPhone,
   userLogin,
   storeOtp,
@@ -10,6 +11,7 @@ import {
 export = {
   createNewUser,
   getUserData,
+  getUserDataFromId,
   getUserWithPhone,
   userLogin,
   storeOtp,

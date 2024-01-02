@@ -1,6 +1,7 @@
 import { Request } from "express";
 import passport, { Profile, DoneCallback } from "passport";
 import googleAuth from "passport-google-oauth20";
+import crypto from 'crypto'
 const googleStrategy = googleAuth.Strategy;
 
 passport.serializeUser((user: Express.User, done: any) => {
@@ -10,6 +11,7 @@ passport.serializeUser((user: Express.User, done: any) => {
 passport.deserializeUser((user: Express.User, done: any) => {
   done(null, user);
 });
+
 
 passport.use(
   new googleStrategy(
@@ -24,14 +26,21 @@ passport.use(
         request: Request,
         accessToken: string,
         refreshToken: string,
-        profile: Profile,
+        profile: any,
         done: any
       ): Promise<void> => {
       console.log(profile);
       try {
-        
+        const randomString: string = crypto.randomBytes(16).toString('hex');
+        const userCredentials = {
+          userName: profile.displayName,
+          email: profile._json.email,
+          password: randomString
+        }
+        done( null, userCredentials)
       } catch (error) {
-        
+        console.log(`something went wrong`);
+        done( error, null)
       }
     }
   )
