@@ -18,7 +18,7 @@ const SignIn = () => {
         window.open(`${GOOGLE_AUTH_WINDOW_URL}`, "_self");
     }
     useEffect(() => {
-        dispatch(checkAuth())
+        dispatch(checkAuth(router))
     }, [])
     const handleSubmit = (userCredentials: signInCredentials) => {
         dispatch(login(userCredentials))

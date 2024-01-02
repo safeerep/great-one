@@ -3,6 +3,7 @@ import axios from "axios";
 import { signUpCredentialsWithOtp, signInCredentials } from "@/types/user";
 import {USERS_SERVICE_BASE_URL} from '../../../constants/index'
 
+
 export const register = createAsyncThunk('/user/register', async ( userCredentials: signUpCredentialsWithOtp) => {
     try {
         const response: any = await axios.post(`${USERS_SERVICE_BASE_URL}/user/signup`, { ...userCredentials }, {
@@ -62,18 +63,56 @@ export const login = createAsyncThunk('/user/login', async ( userCredentials: si
     }
 })
 
-export const checkAuth = createAsyncThunk('/user/check-auth', async () => {
-    try {
+export const checkAuth = createAsyncThunk('/user/check-auth', async (router: any) => {
+    try {        
         const response: any = await axios.get(`${USERS_SERVICE_BASE_URL}/user/check-auth`, {
             headers: {"Content-Type": "application/json" },
             withCredentials: true
         })
         if (response?.data) {
             console.log('check auth response');
-            console.log(response);
+            console.log(response.data.userData);
+            console.log(response.data.success);
+            if (response.data.success) router.push('/')
             return response.data;
         } else {
             console.log('in else');
+            throw new Error(response?.data?.message)
+        }
+    } catch (error: any) {
+        console.log('something went wrong', error);
+    }
+})
+
+export const authRequired = createAsyncThunk('/user/auth-required', async (router: any) => {
+    try {        
+        const response: any = await axios.get(`${USERS_SERVICE_BASE_URL}/user/check-auth`, {
+            headers: {"Content-Type": "application/json" },
+            withCredentials: true
+        })
+        if (response?.data) {
+            if (!response.data.success) router.push('/sign-up')
+            else return response.data;
+        } else {
+            console.log('in else');
+            throw new Error(response?.data?.message)
+        }
+    } catch (error: any) {
+        console.log('something went wrong', error);
+    }
+})
+
+
+export const logout = createAsyncThunk('/user/logout', async (router: any) => {
+    try {        
+        const response: any = await axios.get(`${USERS_SERVICE_BASE_URL}/user/logout`, {
+            headers: {"Content-Type": "application/json" },
+            withCredentials: true
+        })
+        if (response?.data) {
+            if (response.data.success) router.push('/')
+            return response.data;
+        } else {
             throw new Error(response?.data?.message)
         }
     } catch (error: any) {
