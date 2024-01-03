@@ -59,7 +59,7 @@ const Signup = () => {
     return (
         <>
             <div className="flex justify-around w-full min-h-screen items-center">
-                <div className='lg:w-1/4 sm:w-full p-4 shadow'
+                <div className='lg:w-1/4 md:w-1/3 sm:w-1/2 p-4 shadow'
                 >
                     <div style={{
 

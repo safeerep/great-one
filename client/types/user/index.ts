@@ -14,3 +14,8 @@ export type signInCredentials = {
     password: string
 }
 
+export interface UserState {
+    loading: boolean;
+    data: any | null;
+    error: string | null | undefined;
+}

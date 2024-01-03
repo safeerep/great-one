@@ -1,11 +1,13 @@
 "use client"
 import React, { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useDispatch, useSelector } from 'react-redux'
 import { FiUser } from 'react-icons/fi'
 import { BsChatDots } from 'react-icons/bs'
 import { BsSearch } from 'react-icons/bs'
+import { logout } from '@/store/actions/userActions/userActions'
 
 
 
@@ -23,15 +25,20 @@ const Navbar = () => {
   }
 
   const handleLogout = () => {
-    console.log('called for logout');
+    dispatch(logout(router))
   }
 
   const user: any = useSelector((state: any) => state.user.user.data)
   console.log(user?.userData?.userName);
   return (
     <div className='w-full h-16 shadow bg-slate-100 flex justify-between'>
-      <div className='flex justify-center items-center'>
-        <span className='text-black font-semibold ps-10'>EP LINK</span>
+      <div style={{
+        backgroundSize: 'cover',
+      }} className=' flex justify-center items-center'>
+        <Image src="/brand.png"
+          alt='logo'
+          width={200} height={200}>
+        </Image>
       </div>
       <div className='flex relative items-center'>
         <input
@@ -42,7 +49,7 @@ const Navbar = () => {
       </div>
       <div className='flex items-center pe-10'>
         <BsChatDots />
-        {user ? (
+        {(user && user?.userData?.userName !== undefined) ? (
           <>
             <div className="relative inline-block text-left mx-4">
               <div>

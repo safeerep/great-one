@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import verifyToken from "../../../utils/externalServices/tokenChecker";
-import getUserId from "../../../utils/externalServices/getUserId";
+import verifyToken from "../../../utils/externalServices/jwt/tokenChecker";
+import getUserId from "../../../utils/externalServices/jwt/getUserId";
 
 export = ( dependencies: any) => {
     const {

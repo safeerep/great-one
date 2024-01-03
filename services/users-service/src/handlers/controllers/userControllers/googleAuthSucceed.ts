@@ -1,5 +1,5 @@
 import { Response } from 'express'
-import generateToken from "../../../utils/externalServices/tokenGenerator"
+import generateToken from "../../../utils/externalServices/jwt/tokenGenerator"
 export = (dependencies: any) => {
 
     const {
@@ -19,8 +19,7 @@ export = (dependencies: any) => {
                 );
                 if (existingUser) {
                     const token = generateToken(existingUser._id)
-                    req.session.userJwt = token;
-                    console.log(`user existing`);
+                    res.cookie( "userJwt", token, { maxAge: 30 * 24 * 60 * 60 * 1000 } )
                     return res.redirect(process.env.CLIENT_URL + '')
                 }
             } else {

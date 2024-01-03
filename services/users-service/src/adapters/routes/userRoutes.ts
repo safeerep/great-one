@@ -1,10 +1,9 @@
 import express, { Request, Response, response } from "express";
 import { userControllers } from "../../handlers/controllers";
 import passport from "passport";
-import "../../utils/externalServices/googleAuth";
+import "../../utils/externalServices/passportJs/googleAuth";
 
 export = (dependencies: any) => {
-  
   const router = express.Router();
 
   const {
@@ -14,6 +13,8 @@ export = (dependencies: any) => {
     googleAuthSucceedController,
     googleAuthFailedController,
     checkAuthController,
+    logoutController,
+    sendResetPasswordMailController
   } = userControllers(dependencies);
 
   router.use(passport.initialize());
@@ -39,7 +40,9 @@ export = (dependencies: any) => {
   router.get("/signin-success", googleAuthSucceedController);
   router.get("/signin-failure", googleAuthFailedController);
 
-  router.get("/check-auth", checkAuthController)
+  router.get("/check-auth", checkAuthController);
+  router.get("/logout", logoutController);
+  router.post("/send-reset-password-email", sendResetPasswordMailController)
 
   return router;
 };

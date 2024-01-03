@@ -1,9 +1,11 @@
-import userSignupController from "./userSignup.controller";
-import sendOtpForSignupController from "./sendOtpForSignup.controller";
-import loginController from "./login.controller";
-import googleAuthSucceedController from "./googleAuthSucceed.controll";
-import googleAuthFailedController from "./googleAuthFailed.controller";
-import checkAuthController from "./checkAuth.controller";
+import userSignupController from "./userSignup";
+import sendOtpForSignupController from "./sendOtpForSignup";
+import loginController from "./login";
+import googleAuthSucceedController from "./googleAuthSucceed";
+import googleAuthFailedController from "./googleAuthFailed";
+import checkAuthController from "./checkAuth";
+import logoutController from "./logout";
+import sendResetPasswordMail from "./sendResetPasswordMail";
 
 export = (dependencies: any) => {
     return {
@@ -13,5 +15,7 @@ export = (dependencies: any) => {
         googleAuthSucceedController: googleAuthSucceedController(dependencies),
         googleAuthFailedController: googleAuthFailedController(),
         checkAuthController: checkAuthController(dependencies),
+        logoutController: logoutController(),
+        sendResetPasswordMailController: sendResetPasswordMail(dependencies),
     }
 }

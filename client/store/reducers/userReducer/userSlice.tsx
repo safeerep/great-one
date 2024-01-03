@@ -1,11 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { checkAuth, login, register, authRequired, logout } from "@/store/actions/userActions/userActions";
+import { UserState } from "@/types/user";
 
-interface UserState {
-    loading: boolean;
-    data: any | null;
-    error: string | null | undefined;
-}
 
 const INITIAL_STATE: { user: UserState } = {
     user: {
@@ -24,7 +20,7 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         builder
         // signup
-        .addCase(register.pending, ( state) => {
+        .addCase(register.pending, (state: { user: UserState }) => {
             state.user.loading = true;
         })
         .addCase( register.fulfilled, (state: { user: UserState }, action: PayloadAction<string>) => {
@@ -32,42 +28,42 @@ const userSlice = createSlice({
             state.user.data = action.payload;
             state.user.error = null;
         })
-        .addCase( register.rejected, ( state: any, action) => {
+        .addCase( register.rejected, (state: { user: UserState }, action) => {
             state.user.loading = false;
             state.user.data = null;
             state.user.error = action.error.message;
         })
         // login
-        .addCase(login.pending, ( state) => {
+        .addCase(login.pending, ( state: { user: UserState }) => {
             state.user.loading = true;
         })
-        .addCase(login.fulfilled, (state: { user: UserState }, action: PayloadAction<string>) => {
+        .addCase(login.fulfilled, (state: { user: UserState }, action) => {
             state.user.loading = false;
             state.user.data = action.payload;
             state.user.error = null;
         })
-        .addCase( login.rejected, ( state: any, action) => {
+        .addCase( login.rejected, ( state: { user: UserState }, action) => {
             state.user.loading = false;
             state.user.data = null;
             state.user.error = action.error.message;
         })
         // auth checking
-        .addCase( checkAuth.pending, ( state: any) => {
-            state.user.pending = true;
+        .addCase( checkAuth.pending, (state: { user: UserState }) => {
+            state.user.loading = true;
         })
         .addCase( checkAuth.fulfilled, (state: { user: UserState }, action: PayloadAction<string>) => {
             state.user.loading = false;
             state.user.data = action.payload;
             state.user.error = null;
         })
-        .addCase( checkAuth.rejected, ( state:any, action) => {
+        .addCase( checkAuth.rejected, (state: { user: UserState }, action) => {
             state.user.loading = false;
             state.user.data = null;
             state.user.error = action.error.message;
         })
         // checking auth for where it is needed
-        .addCase( authRequired.pending, ( state: any) => {
-            state.user.pending = true;
+        .addCase( authRequired.pending, (state: { user: UserState }) => {
+            state.user.loading = true;
         })
         .addCase( authRequired.fulfilled, (state: { user: UserState }, action: PayloadAction<string>) => {
             state.user.loading = false;
@@ -80,7 +76,7 @@ const userSlice = createSlice({
             state.user.error = action.error.message;
         })
         // on user logout
-        .addCase( logout.pending, ( state: any) => {
+        .addCase( logout.pending, (state: { user: UserState }) => {
             state.user.loading = true;
         })
         .addCase( logout.fulfilled, (state: { user: UserState }, action: PayloadAction<string>) => {
@@ -88,9 +84,8 @@ const userSlice = createSlice({
             state.user.data = null;
             state.user.error = null;
         })
-        .addCase( logout.rejected, ( state: any, action) => {
+        .addCase( logout.rejected, (state: { user: UserState }, action) => {
             state.user.loading = false;
-            state.user.data = action.payload;
             state.user.error = action.error.message;
         })
     }

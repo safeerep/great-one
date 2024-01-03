@@ -1,4 +1,4 @@
-import sendOtp from "./nodemailer";
+import sendOtp from "./nodemailer/sendOtp";
 
 export {
     sendOtp

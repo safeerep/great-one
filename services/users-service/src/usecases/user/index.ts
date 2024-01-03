@@ -1,10 +1,10 @@
-import { findExistingUser_usecase } from "./findExistingUser.usecase";
-import { findUserWithPhone_usecase } from "./findWithPhone.usecase";
-import { findUserWithId_usecase } from "./findUserWithId.usecase";
-import { register_usecase } from "./register.usecase";
-import { login_usecase } from "./userLogin.usecase";
-import { storeOtp_usecase } from "./storeOtp.usecase";
-import { verifyOtp_usecase } from "./verifyOtp.usecase";
+import { findExistingUser_usecase } from "./findExistingUser";
+import { findUserWithPhone_usecase } from "./findWithPhone";
+import { findUserWithId_usecase } from "./findUserWithId";
+import { register_usecase } from "./register";
+import { login_usecase } from "./userLogin";
+import { storeOtp_usecase } from "./storeOtp";
+import { verifyOtp_usecase } from "./verifyOtp";
 
 export = {
     findExistingUser_usecase,

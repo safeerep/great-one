@@ -6,7 +6,7 @@ import {
   userLogin,
   storeOtp,
   verifyOtp,
-} from "./user.repo";
+} from "./userRepo";
 
 export = {
   createNewUser,

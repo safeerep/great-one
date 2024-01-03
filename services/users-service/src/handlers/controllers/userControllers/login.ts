@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import signinValidationSchema from "../../../utils/validators/signin.validator";
-import generateToken from "../../../utils/externalServices/tokenGenerator";
+import generateToken from "../../../utils/externalServices/jwt/tokenGenerator";
 import bcrypt from "bcrypt";
 
 export = (dependencies: any): any => {
@@ -10,7 +10,6 @@ export = (dependencies: any): any => {
 
   const login = async (req: Request, res: Response, next: NextFunction) => {
     const userCredentials = req.body;
-    console.log(userCredentials);
     try {
       // to validate the data from request with the actual data we need;
       await signinValidationSchema.validate(userCredentials, {
@@ -22,14 +21,14 @@ export = (dependencies: any): any => {
       }));
       return res.status(400).json({ success: false, message: errors[0] });
     }
-    let existingUser;
+    let userData;
     try {
-      existingUser = await findExistingUser_usecase(dependencies).execute(
+      userData = await findExistingUser_usecase(dependencies).execute(
         userCredentials.email
       );
-      console.log(existingUser);
+      console.log(userData);
       
-      if (!existingUser) {
+      if (!userData) {
         return res
           .status(401)
           .json({ success: false, message: "invalid credentials" });
@@ -40,11 +39,11 @@ export = (dependencies: any): any => {
     }
 
     try {
-        const isPasswordMatching = await bcrypt.compare(userCredentials.password, existingUser.password);
+        const isPasswordMatching = await bcrypt.compare(userCredentials.password, userData.password);
         if (isPasswordMatching) {
-            const token = generateToken(existingUser._id) 
+            const token = generateToken(userData._id) 
             res.cookie( "userJwt", token, { maxAge: 30 * 24 * 60 * 60 * 1000 })
-            return res.status(200).json({ success: true, existingUser, message: 'successfully logged in'})
+            return res.status(200).json({ success: true, userData, message: 'successfully logged in'})
         }
         else return res.status(401).json({ success: false, message: 'invalid credentials'})
     } catch (error) {

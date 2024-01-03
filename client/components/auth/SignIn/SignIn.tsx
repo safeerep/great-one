@@ -12,8 +12,8 @@ import { GOOGLE_AUTH_WINDOW_URL } from '@/constants'
 
 const SignIn = () => {
     const dispatch: any = useDispatch();
+    const [error, setError] = useState()
     const router = useRouter();
-
     const handleGoogleAuth = () => {
         window.open(`${GOOGLE_AUTH_WINDOW_URL}`, "_self");
     }
@@ -21,22 +21,14 @@ const SignIn = () => {
         dispatch(checkAuth(router))
     }, [])
     const handleSubmit = (userCredentials: signInCredentials) => {
-        dispatch(login(userCredentials))
-            .then((data: any) => {
-                console.log(data);
-                if (data.payload.success) {
-                    router.push('/')
-                }
-            })
-            .catch((err: any) => {
-                console.log(`an error happened ${err}`);
-            })
+        dispatch(login({ userCredentials, router, setError}))
     }
+
     return (
         <>
             <div className="flex justify-around w-full min-h-screen items-center"
             >
-                <div className='lg:w-1/4 sm:w-full p-4 shadow'
+                <div className='lg:w-1/4 md:w-1/3 sm:w-1/2 p-4 shadow'
                 >
                     <div style={{
                         backgroundSize: 'cover',
@@ -46,6 +38,7 @@ const SignIn = () => {
                             width={200} height={200}>
                         </Image>
                     </div>
+                    {error && <span className="flex justify-center text-red-500 text-md"> {error}</span> }
                     <main className="flex  justify-center items-center full">
                         <Formik
                             initialValues={{ email: "", password: "" }}
@@ -69,7 +62,7 @@ const SignIn = () => {
                                 />
                                 <ErrorMessage name="password" component="div" className="text-red-500 text-xs text-start" />
                                 <p>
-                                    <Link className='text-blue-600' href='/sign-in'>forgot password?</Link>
+                                    <Link className='text-blue-600' href='/forgot-password'>forgot password?</Link>
                                 </p>
                                 <div className='w-full px-1 py-2'>
                                     <button type="submit" className='bg-gray-950 w-full py-2 rounded-sm'>

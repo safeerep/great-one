@@ -7,6 +7,7 @@ import session from 'express-session'
 import { BASE_URL_OF_FRONT_END } from './constants/constants';
 import { routes } from './adapters/routes';
 import dependencies from './utils/config/dependencies';
+
 const app: Express = express();
 const PORT: number = Number(process.env.PORT) || 3001;
 

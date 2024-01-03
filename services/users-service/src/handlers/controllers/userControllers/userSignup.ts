@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import signupValidationSchema from "../../../utils/validators/signup.validator";
-import generateToken from "../../../utils/externalServices/tokenGenerator";
+import generateToken from "../../../utils/externalServices/jwt/tokenGenerator";
 import bcrypt from "bcrypt";
 
 export = (dependencies: any): any => {
@@ -67,15 +67,15 @@ export = (dependencies: any): any => {
         salt
       );
       userCredentials.password = hashedPassword;
-      let newUser = await register_usecase(dependencies).execute(
+      let userData = await register_usecase(dependencies).execute(
         userCredentials
       );
-      if (!newUser) {
+      if (!userData) {
         return res.json({ success: false, message: 'phone number already existing'})
       }
-      const token = generateToken(newUser._id);
+      const token = generateToken(userData._id);
       res.cookie( "userJwt", token, { maxAge: 30 * 24 * 60 * 60 * 1000 } )
-      return res.status(201).json({ success: true, newUser });
+      return res.status(201).json({ success: true, userData });
     } catch (error) {
       console.log(`here is error`, error);
       return res.status(400).json({ success: false, error });

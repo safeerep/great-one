@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { IOtp } from "../../../../entities/user.entities";
+import { IOtp } from "../../../../entities/userEntities";
 
 const otpSchema: Schema = new Schema(
   {
