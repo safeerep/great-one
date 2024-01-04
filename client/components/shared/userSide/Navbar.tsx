@@ -28,7 +28,7 @@ const Navbar = () => {
     dispatch(logout(router))
   }
 
-  const user: any = useSelector((state: any) => state.user.user.data)
+  const user: any = useSelector((state: any) => state.user.data)
   console.log(user?.userData?.userName);
   return (
     <div className='w-full h-16 shadow bg-slate-100 flex justify-between'>

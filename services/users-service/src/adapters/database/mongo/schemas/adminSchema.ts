@@ -1,23 +1,17 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
+import { IAdmin } from "../../../../entities/adminEntities";
 
-export interface IAdmins extends Document {
-  _id: ObjectId;
-  Email: String;
-  Password: String;
-}
 
-const AdminsSchema: Schema = new Schema({
-  Email: {
+const AdminSchema: Schema = new Schema({
+  email: {
     type: String,
     required: true,
     unique: true,
   },
-  Password: {
+  password: {
     type: String,
     required: true,
   },
 });
 
-const Admins = mongoose.model<IAdmins>("Admins", AdminsSchema);
-
-export default Admins;
+export default mongoose.model<IAdmin>("Admins", AdminSchema);

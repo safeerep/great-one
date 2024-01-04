@@ -1,8 +1,9 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
-import { sendEmailToResetPassword } from '@/store/actions/userActions/userActions';
+import { sendEmailToResetPassword, checkAuth } from '@/store/actions/userActions/userActions';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { emailValidationSchema } from '@/models/validationSchemas';
 
@@ -10,10 +11,13 @@ const ForgotPassword = () => {
     const [error, setError] = useState();
     const [success, setSuccess] = useState();
     const dispatch:any = useDispatch()
+    const router = useRouter()
     const handleSubmit = (userEmail: string | any ) => {
-        console.log(userEmail);
         dispatch(sendEmailToResetPassword({ userEmail, setSuccess, setError}))
     }
+    useEffect(() => {
+        dispatch(checkAuth(router))
+    }, [])
 
     return (
         <>
@@ -32,7 +36,7 @@ const ForgotPassword = () => {
                     {success && <span className="text-green-600 text-md text-center w-full">{success}</span> }
                     {error && <span className="text-red-500 text-xs text-start">{error}</span> }
                     </div>
-                    <main className="flex  justify-center items-center full">
+                    <main className="flex justify-center items-center full">
                         <Formik
                             initialValues={{ email: "" }}
                             validationSchema={emailValidationSchema}

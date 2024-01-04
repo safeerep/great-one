@@ -1,14 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { checkAuth, login, register, authRequired, logout } from "@/store/actions/userActions/userActions";
+import { checkAuth, login, register, authRequired, logout, RequestToResetPassword } from "@/store/actions/userActions/userActions";
 import { UserState } from "@/types/user";
 
 
-const INITIAL_STATE: { user: UserState } = {
-    user: {
+const INITIAL_STATE: UserState = {
         loading: false,
         data: null,
         error: null
-    }
 }
 
 const userSlice = createSlice({
@@ -20,73 +18,86 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         builder
         // signup
-        .addCase(register.pending, (state: { user: UserState }) => {
-            state.user.loading = true;
+        .addCase(register.pending, (state: UserState ) => {
+            state.loading = true;
         })
-        .addCase( register.fulfilled, (state: { user: UserState }, action: PayloadAction<string>) => {
-            state.user.loading = false;
-            state.user.data = action.payload;
-            state.user.error = null;
+        .addCase( register.fulfilled, (state: UserState , action: PayloadAction<string>) => {
+            state.loading = false;
+            state.data = action.payload;
+            state.error = null;
         })
-        .addCase( register.rejected, (state: { user: UserState }, action) => {
-            state.user.loading = false;
-            state.user.data = null;
-            state.user.error = action.error.message;
+        .addCase( register.rejected, (state: UserState , action) => {
+            state.loading = false;
+            state.data = null;
+            state.error = action.error.message;
         })
         // login
-        .addCase(login.pending, ( state: { user: UserState }) => {
-            state.user.loading = true;
+        .addCase(login.pending, ( state: UserState ) => {
+            state.loading = true;
         })
-        .addCase(login.fulfilled, (state: { user: UserState }, action) => {
-            state.user.loading = false;
-            state.user.data = action.payload;
-            state.user.error = null;
+        .addCase(login.fulfilled, (state: UserState , action) => {
+            state.loading = false;
+            state.data = action.payload;
+            state.error = null;
         })
-        .addCase( login.rejected, ( state: { user: UserState }, action) => {
-            state.user.loading = false;
-            state.user.data = null;
-            state.user.error = action.error.message;
+        .addCase( login.rejected, ( state: UserState, action) => {
+            state.loading = false;
+            state.data = null;
+            state.error = action.error.message;
         })
         // auth checking
-        .addCase( checkAuth.pending, (state: { user: UserState }) => {
-            state.user.loading = true;
+        .addCase( checkAuth.pending, (state: UserState) => {
+            state.loading = true;
         })
-        .addCase( checkAuth.fulfilled, (state: { user: UserState }, action: PayloadAction<string>) => {
-            state.user.loading = false;
-            state.user.data = action.payload;
-            state.user.error = null;
+        .addCase( checkAuth.fulfilled, (state: UserState, action: PayloadAction<string>) => {
+            state.loading = false;
+            state.data = action.payload;
+            state.error = null;
         })
-        .addCase( checkAuth.rejected, (state: { user: UserState }, action) => {
-            state.user.loading = false;
-            state.user.data = null;
-            state.user.error = action.error.message;
+        .addCase( checkAuth.rejected, (state: UserState, action) => {
+            state.loading = false;
+            state.data = null;
+            state.error = action.error.message;
         })
         // checking auth for where it is needed
-        .addCase( authRequired.pending, (state: { user: UserState }) => {
-            state.user.loading = true;
+        .addCase( authRequired.pending, (state: UserState ) => {
+            state.loading = true;
         })
-        .addCase( authRequired.fulfilled, (state: { user: UserState }, action: PayloadAction<string>) => {
-            state.user.loading = false;
-            state.user.data = action.payload;
-            state.user.error = null;
+        .addCase( authRequired.fulfilled, (state: UserState, action: PayloadAction<string>) => {
+            state.loading = false;
+            state.data = action.payload;
+            state.error = null;
         })
-        .addCase( authRequired.rejected, ( state: { user: UserState }, action) => {
-            state.user.loading = false;
-            state.user.data = null;
-            state.user.error = action.error.message;
+        .addCase( authRequired.rejected, ( state: UserState , action) => {
+            state.loading = false;
+            state.data = null;
+            state.error = action.error.message;
         })
         // on user logout
-        .addCase( logout.pending, (state: { user: UserState }) => {
-            state.user.loading = true;
+        .addCase( logout.pending, (state: UserState ) => {
+            state.loading = true;
         })
-        .addCase( logout.fulfilled, (state: { user: UserState }, action: PayloadAction<string>) => {
-            state.user.loading = false;
-            state.user.data = null;
-            state.user.error = null;
+        .addCase( logout.fulfilled, (state: UserState , action: PayloadAction<string>) => {
+            state.loading = false;
+            state.data = null;
+            state.error = null;
         })
-        .addCase( logout.rejected, (state: { user: UserState }, action) => {
-            state.user.loading = false;
-            state.user.error = action.error.message;
+        .addCase( logout.rejected, (state: UserState, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        })
+        // on change-password
+        .addCase( RequestToResetPassword.pending, (state: UserState ) => {
+            state.loading = true;
+        })
+        .addCase( RequestToResetPassword.fulfilled, (state: UserState, action: PayloadAction<string>) => {
+            state.loading = false;
+            state.data = action.payload;
+            state.error = null;
+        })
+        .addCase( RequestToResetPassword.rejected, ( state: UserState, action) => {
+            state.loading = false;
+            state.error = action.error.message;
         })
     }
 })

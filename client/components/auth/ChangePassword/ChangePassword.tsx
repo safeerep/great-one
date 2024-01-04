@@ -1,19 +1,27 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
-import { sendEmailToResetPassword } from '@/store/actions/userActions/userActions';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { RequestToResetPassword, checkAuth } from '@/store/actions/userActions/userActions';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { emailValidationSchema } from '@/models/validationSchemas';
+import { passwordValidationSchema } from '@/models/validationSchemas';
 
 const ChangePassword = () => {
     const [error, setError] = useState();
     const [success, setSuccess] = useState();
     const dispatch:any = useDispatch()
-    const handleSubmit = (userEmail: string | any ) => {
-        console.log(userEmail);
-        dispatch(sendEmailToResetPassword({ userEmail, setSuccess, setError}))
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const token: string | any = searchParams.get("me");
+    
+    const handleSubmit = (passwords: any) => {
+        dispatch(RequestToResetPassword({ passwords, token, setSuccess, setError, router}))
     }
+
+    useEffect(() => {
+        dispatch(checkAuth(router))
+    }, [])
 
     return (
         <>
@@ -28,29 +36,28 @@ const ChangePassword = () => {
                         </Image>
                     </div>
                     <div className="w-full flex justify-center">
-
                     {success && <span className="text-green-600 text-md text-center w-full">{success}</span> }
                     {error && <span className="text-red-500 text-xs text-start">{error}</span> }
                     </div>
                     <main className="flex  justify-center items-center full">
                         <Formik
-                            initialValues={{ email: "" }}
-                            validationSchema={emailValidationSchema}
-                            onSubmit={(userEmail) => {
-                                handleSubmit(userEmail);
+                            initialValues={{ password: "", confirmpassword: "" }}
+                            validationSchema={passwordValidationSchema}
+                            onSubmit={(passwords) => {
+                                handleSubmit(passwords);
                             }} >
                             <Form className='flex flex-col items-center'>
                                 <Field
                                     name="password"
                                     placeholder='enter new password here'
-                                    type='text'
+                                    type='password'
                                     className='border border-black p-3 m-1'
                                 />
                                 <ErrorMessage name="password" component="div" className="text-red-500 text-xs text-start" />
                                 <Field
                                     name="confirmpassword"
                                     placeholder='confirm password here'
-                                    type='text'
+                                    type='password'
                                     className='border border-black p-3 m-1'
                                 />
                                 <ErrorMessage name="confirmpassword" component="div" className="text-red-500 text-xs text-start" />

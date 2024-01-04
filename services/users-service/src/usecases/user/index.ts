@@ -5,6 +5,7 @@ import { register_usecase } from "./register";
 import { login_usecase } from "./userLogin";
 import { storeOtp_usecase } from "./storeOtp";
 import { verifyOtp_usecase } from "./verifyOtp";
+import { upadatePassword_usecase } from "./updateUserPassword";
 
 export = {
     findExistingUser_usecase,
@@ -14,4 +15,5 @@ export = {
     login_usecase,
     storeOtp_usecase,
     verifyOtp_usecase,
+    upadatePassword_usecase,
 }

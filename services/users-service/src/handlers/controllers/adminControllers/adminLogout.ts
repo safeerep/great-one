@@ -1,13 +1,13 @@
 import { Response } from "express";
 
 export = () => {
-    const logout = (req: any, res: Response) => {
+    const adminLogout = (req: any, res: Response) => {
         try {
-            res.clearCookie("userJwt");
+            res.clearCookie("adminJwt");
             return res.json({ success: true, message: 'successfully logged out'})
         } catch (error) {
             return res.json({success: false, message: 'something went wrong during logging out'})
         }
     }
-    return logout;
+    return adminLogout;
 }

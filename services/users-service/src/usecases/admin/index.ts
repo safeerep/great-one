@@ -1,5 +1,7 @@
-import { adminLogin_usecase } from "./adminLogin";
+import { findAdmin_usecase } from "./findAdminWithEmail";
+import { findAdminWithId_usecase } from "./findAdminWithId";
 
 export = {
-    adminLogin_usecase
+    findAdmin_usecase,
+    findAdminWithId_usecase,
 }

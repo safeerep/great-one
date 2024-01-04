@@ -1,4 +1,4 @@
-import express, { Request, Response, response } from "express";
+import express, { Request, Response } from "express";
 import { userControllers } from "../../handlers/controllers";
 import passport from "passport";
 import "../../utils/externalServices/passportJs/googleAuth";
@@ -14,7 +14,8 @@ export = (dependencies: any) => {
     googleAuthFailedController,
     checkAuthController,
     logoutController,
-    sendResetPasswordMailController
+    sendResetPasswordMailController,
+    changePasswordController
   } = userControllers(dependencies);
 
   router.use(passport.initialize());
@@ -43,6 +44,7 @@ export = (dependencies: any) => {
   router.get("/check-auth", checkAuthController);
   router.get("/logout", logoutController);
   router.post("/send-reset-password-email", sendResetPasswordMailController)
+  router.post("/change-password", changePasswordController)
 
   return router;
 };

@@ -58,7 +58,7 @@ export const login = createAsyncThunk('/user/login',
             setError(error?.response?.data?.message)
             return error.response.data
         }
-    })
+})
 
 export const checkAuth = createAsyncThunk('/user/check-auth', async (router: any) => {
     try {
@@ -118,10 +118,10 @@ export const logout = createAsyncThunk('/user/logout', async (router: any) => {
 })
 
 export const sendEmailToResetPassword = createAsyncThunk('/user/send-email',
-    async ({userEmail, setSuccess, setError}: {userEmail: any, setSuccess: any, setError: any}) => {
+    async ({ userEmail, setSuccess, setError }: { userEmail: any, setSuccess: any, setError: any }) => {
         try {
             const response: any = await axios.post(`${USERS_SERVICE_BASE_URL}/user/send-reset-password-email`,
-            { ...userEmail } , {
+                { ...userEmail }, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true
             })
@@ -134,9 +134,37 @@ export const sendEmailToResetPassword = createAsyncThunk('/user/send-email',
                     setSuccess(null)
                     setError(response?.data?.message)
                 };
-            } 
-            else throw new Error ('something went wrong')
+            }
+            else throw new Error('something went wrong')
         } catch (error: any) {
             console.log('something went wrong', error);
         }
-})
+    })
+
+
+export const RequestToResetPassword = createAsyncThunk('/user/reset-password',
+    async ({ passwords, token, setSuccess, setError, router }: { passwords: any, token: string, setSuccess: any, setError: any, router: any }) => {
+        try {
+            const response: any = await axios.post(`${USERS_SERVICE_BASE_URL}/user/change-password`,
+                { ...passwords, token }, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true
+            })
+            if (response?.data) {
+                if (response?.data?.success) {
+                    setError(null)
+                    setSuccess(response?.data?.message)
+                    router.push('/')
+                    return response?.data;
+                }
+                else {
+                    setSuccess(null)
+                    setError(response?.data?.message)
+                };
+            }
+            else throw new Error('something went wrong')
+        } catch (error: any) {
+            console.log('something went wrong', error);
+        }
+    }
+)

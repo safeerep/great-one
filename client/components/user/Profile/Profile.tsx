@@ -18,7 +18,7 @@ const Profile = () => {
       <Navbar />
       <div className="flex lg:flex-row md:flex-col sm:flex-col w-full px-8 p-2">
         <ProfileSidebar />
-        <div className="flex-grow bg-gray-50">
+        <div className="flex-grow">
           <h1 className='text-xl p-3'> Your Products </h1>
           <Posts />
         </div>

@@ -15,7 +15,7 @@ const sendEmailForResetPassword = async (email: string, token: string) => {
     button: {
       color: "#22BC66",
       text: "Change Password",
-      link: `${process.env.CLIENT_URL}/change-password?token=${token}`,
+      link: `${process.env.CLIENT_URL}/change-password?me=${token}`,
     },
   };
 

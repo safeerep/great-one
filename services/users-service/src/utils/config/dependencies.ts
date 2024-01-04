@@ -1,28 +1,14 @@
-// import {
-//   login_usecase,
-//   register_usecase,
-//   findExistingUser_usecase,
-//   findUserWithPhone_usecase,
-//   storeOtp_usecase,
-//   verifyOtp_usecase,
-// } from "../../usecases";
-
-// const useCases: any = {
-//   login_usecase,
-//   register_usecase,
-//   findExistingUser_usecase,
-//   findUserWithPhone_usecase,
-//   storeOtp_usecase,
-//   verifyOtp_usecase,
-// };
-import { usecases } from "../../usecases";
+import { usecases, adminUsecases } from "../../usecases";
 import { userRepo } from "../../adapters/database/mongo/repositories";
+import { adminRepo } from "../../adapters/database/mongo/repositories";
 
 const repositories: any = {
-    userRepo
+    userRepo,
+    adminRepo
 };
 
 export = {
   usecases,
+  adminUsecases,
   repositories,
 };

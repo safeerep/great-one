@@ -9,9 +9,11 @@ import Banner from '../Banner'
 const Home = () => {
   const dispatch: any = useDispatch();
   const router = useRouter();
+  
   useEffect(() => {
     dispatch(checkAuth(router))
   }, [])
+
   return (
     <main>
       <Navbar />

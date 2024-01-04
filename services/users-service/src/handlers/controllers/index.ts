@@ -1,5 +1,7 @@
 import userControllers from "./userControllers";
+import adminControllers from "./adminControllers";
 
 export {
-    userControllers
+    userControllers,
+    adminControllers
 }

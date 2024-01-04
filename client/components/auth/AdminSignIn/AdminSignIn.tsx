@@ -6,25 +6,20 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { useDispatch, useSelector } from 'react-redux'
 import Image from 'next/image'
 import { signInValidationSchema } from '@/models/validationSchemas'
-import { login, checkAuth } from '@/store/actions/userActions/userActions'
-import { signInCredentials } from '@/types/user'
-import { GOOGLE_AUTH_WINDOW_URL } from '@/constants'
+import { login, checkAuth } from '@/store/actions/adminActions/adminActions'
+import { signInCredentials } from '@/types/admin'
 
-const SignIn = () => {
+const AdminSignIn = () => {
     const dispatch: any = useDispatch();
     const [error, setError] = useState()
     const router = useRouter();
 
-    const handleGoogleAuth = () => {
-        window.open(`${GOOGLE_AUTH_WINDOW_URL}`, "_self");
-    }
-
     useEffect(() => {
         dispatch(checkAuth(router))
     }, [])
-    
-    const handleSubmit = (userCredentials: signInCredentials) => {
-        dispatch(login({ userCredentials, router, setError}))
+
+    const handleSubmit = ( adminCredentials: signInCredentials) => {
+        dispatch(login({ adminCredentials, router, setError}))
     }
 
     return (
@@ -41,13 +36,14 @@ const SignIn = () => {
                             width={200} height={200}>
                         </Image>
                     </div>
+                    <h1 className='flex justify-center text-xl m-2' >Welcome Admin</h1>
                     {error && <span className="flex justify-center text-red-500 text-md"> {error}</span> }
                     <main className="flex  justify-center items-center full">
                         <Formik
                             initialValues={{ email: "", password: "" }}
                             validationSchema={signInValidationSchema}
-                            onSubmit={(userCredentials) => {
-                                handleSubmit(userCredentials);
+                            onSubmit={(adminCredentials) => {
+                                handleSubmit(adminCredentials);
                             }} >
                             <Form className='flex flex-col items-center'>
                                 <Field
@@ -65,27 +61,13 @@ const SignIn = () => {
                                 />
                                 <ErrorMessage name="password" component="div" className="text-red-500 text-xs text-start" />
                                 <p>
-                                    <Link className='text-blue-600' href='/forgot-password'>forgot password?</Link>
+                                    <Link className='text-blue-600' href='/admin/forgot-password'>forgot password?</Link>
                                 </p>
                                 <div className='w-full px-1 py-2'>
                                     <button type="submit" className='bg-gray-950 w-full py-2 rounded-sm'>
                                         <span className='font-bold text-white'> SignIn </span>
                                     </button>
                                 </div>
-                                <div className='w-full m-5 flex items-center relative'>
-                                    <hr className='flex w-full border border-black' />
-                                    <div className='font-bold absolute w-full flex justify-center'>
-                                        <span className='bg-white px-2'>OR</span>
-                                    </div>
-                                </div>
-                                <button
-                                    type='button'
-                                    className='w-full border border-black p-3 m-1 flex justify-center items-center rounded-md'
-                                    onClick={handleGoogleAuth}
-                                >
-                                    <Image src='/google-icon.png' width={20} height={20} alt='google icon' />
-                                    <span className='font-semibold ps-2'>Continue with Google</span>
-                                </button>
                             </Form>
                         </Formik>
                     </main>
@@ -95,4 +77,4 @@ const SignIn = () => {
     )
 }
 
-export default SignIn
+export default AdminSignIn;

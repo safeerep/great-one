@@ -6,6 +6,7 @@ import {
   userLogin,
   storeOtp,
   verifyOtp,
+  updatePassword
 } from "./userRepo";
 
 export = {
@@ -16,4 +17,5 @@ export = {
   userLogin,
   storeOtp,
   verifyOtp,
+  updatePassword,
 };

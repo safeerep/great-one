@@ -6,6 +6,7 @@ import googleAuthFailedController from "./googleAuthFailed";
 import checkAuthController from "./checkAuth";
 import logoutController from "./logout";
 import sendResetPasswordMail from "./sendResetPasswordMail";
+import verifyResetPassword from "./verifyResetPassword";
 
 export = (dependencies: any) => {
     return {
@@ -17,5 +18,6 @@ export = (dependencies: any) => {
         checkAuthController: checkAuthController(dependencies),
         logoutController: logoutController(),
         sendResetPasswordMailController: sendResetPasswordMail(dependencies),
+        changePasswordController: verifyResetPassword(dependencies),
     }
 }
