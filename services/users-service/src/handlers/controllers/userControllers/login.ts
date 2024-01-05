@@ -33,12 +33,21 @@ export = (dependencies: any): any => {
           .status(401)
           .json({ success: false, message: "invalid credentials" });
       }
+      
+      // now user is present and so, we want to check user is blocked or not
+      if (!userData.status) {
+        console.log('status false');
+        return res.json({ success: false, message: "you are blocked from this application" })
+      }
+      
     } catch (error) {
       console.log(error);
       return res.json({ success: false, message: "something went wrong" });
     }
 
     try {
+      console.log('try w');
+      
         const isPasswordMatching = await bcrypt.compare(userCredentials.password, userData.password);
         if (isPasswordMatching) {
             const token = generateToken(userData._id) 

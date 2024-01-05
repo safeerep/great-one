@@ -11,9 +11,6 @@ export = (dependencies: any) => {
 
     const adminLogin = async ( req: Request, res: Response) => {
         let adminData;
-        let hashedPassword = bcrypt.hashSync(req.body?.password, 10)
-        console.log(hashedPassword);
-        
         try {
             // first we have to check that an admin is existing with the email came as credential;
             const adminEmail: string = req?.body?.email;

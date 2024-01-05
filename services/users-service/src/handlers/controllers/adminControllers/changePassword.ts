@@ -9,10 +9,9 @@ export = (dependencies: any) => {
             upadatePassword_usecase
         }
     } = dependencies;
-    const verifyTokenAndChangePassword = ( req: Request, res: Response) => {
+    const ChangeAdminPassword = ( req: Request, res: Response) => {
         const tokenToVerify: string = req?.body?.token || '';
         const password: string = req?.body?.password;
-        console.log('ok safeer');
         try {
             // first we have to check is there have token or not 
             if (!tokenToVerify) return res.json({ success: false, message: 'link is invalid'})
@@ -28,14 +27,14 @@ export = (dependencies: any) => {
             // we have to verify the token 
             // we previously gave a specified time frame for the validity of token 
             checkTokenAndGetUserEmail(tokenToVerify)
-            .then( async (userEmail: string) => {
+            .then( async (email: string) => {
                 // if token is valid, we have to update password
                 const saltRounds: number = Number(process.env.SALT_ROUNDS) || 10;
                 const hashedPassword: string = bcrypt.hashSync(password, saltRounds)
-                const userData = await upadatePassword_usecase(dependencies).execute(userEmail, hashedPassword)
-                const token = generateToken(userData._id) 
-                res.cookie( "userJwt", token, { maxAge: 30 * 24 * 60 * 60 * 1000 })
-                return res.json({ success: true, userData, message: "password updated successfully"})
+                const adminData = await upadatePassword_usecase(dependencies).execute(email, hashedPassword)
+                const token = generateToken(adminData._id);
+                res.cookie( "adminJwt", token, { maxAge: 30 * 24 * 60 * 60 * 1000 })
+                return res.status(200).json({ success: true, adminData, message: "password updated successfully"})
             })
             .catch((err: any) => {
                 return res.json({ success: false, message : "link is invalid"})
@@ -44,5 +43,5 @@ export = (dependencies: any) => {
             return res.status(503).json({ success: false, message: "something went wrong"})
         }
     }
-    return verifyTokenAndChangePassword;
+    return ChangeAdminPassword;
 }

@@ -1,24 +1,20 @@
 "use client"
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { RequestToResetPassword, checkAuth } from '@/store/actions/adminActions/adminActions';
+import { sendEmailToResetPassword, checkAuth } from '@/store/actions/adminActions/adminActions';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { passwordValidationSchema } from '@/models/validationSchemas';
+import { emailValidationSchema } from '@/models/validationSchemas';
 
-const ChangePassword = () => {
+const AdminForgotPassword = () => {
     const [error, setError] = useState();
     const [success, setSuccess] = useState();
     const dispatch:any = useDispatch()
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const token: string | any = searchParams.get("me");
-    
-    const handleSubmit = (passwords: any) => {
-        dispatch(RequestToResetPassword({ passwords, token, setSuccess, setError, router}))
+    const router = useRouter()
+    const handleSubmit = (userEmail: string | any ) => {
+        dispatch(sendEmailToResetPassword({ userEmail, setSuccess, setError}))
     }
-
     useEffect(() => {
         dispatch(checkAuth(router))
     }, [])
@@ -36,34 +32,28 @@ const ChangePassword = () => {
                         </Image>
                     </div>
                     <div className="w-full flex justify-center">
+
                     {success && <span className="text-green-600 text-md text-center w-full">{success}</span> }
                     {error && <span className="text-red-500 text-xs text-start">{error}</span> }
                     </div>
-                    <main className="flex  justify-center items-center full">
+                    <main className="flex justify-center items-center full">
                         <Formik
-                            initialValues={{ password: "", confirmpassword: "" }}
-                            validationSchema={passwordValidationSchema}
-                            onSubmit={(passwords) => {
-                                handleSubmit(passwords);
+                            initialValues={{ email: "" }}
+                            validationSchema={emailValidationSchema}
+                            onSubmit={(userEmail) => {
+                                handleSubmit(userEmail);
                             }} >
                             <Form className='flex flex-col items-center'>
                                 <Field
-                                    name="password"
-                                    placeholder='enter new password here'
-                                    type='password'
+                                    name="email"
+                                    placeholder='enter your email here'
+                                    type='email'
                                     className='border border-black p-3 m-1'
                                 />
-                                <ErrorMessage name="password" component="div" className="text-red-500 text-xs text-start" />
-                                <Field
-                                    name="confirmpassword"
-                                    placeholder='confirm password here'
-                                    type='password'
-                                    className='border border-black p-3 m-1'
-                                />
-                                <ErrorMessage name="confirmpassword" component="div" className="text-red-500 text-xs text-start" />
+                                <ErrorMessage name="email" component="div" className="text-red-500 text-xs text-start" />
                                 <div className='w-full px-1 py-2'>
                                     <button type="submit" className='bg-black w-full py-2 rounded-md'>
-                                        <span className='font-bold text-white'> Update </span>
+                                        <span className='font-bold text-white'> Continue </span>
                                     </button>
                                 </div>
                             </Form>
@@ -75,4 +65,4 @@ const ChangePassword = () => {
     )
 }
 
-export default ChangePassword;
+export default AdminForgotPassword;

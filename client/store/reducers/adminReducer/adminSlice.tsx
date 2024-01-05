@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AdminState } from "@/types/admin";
-import { login, checkAuth, authRequired, logout } from "@/store/actions/adminActions/adminActions";
+import { login, checkAuth, authRequired, logout, getAllUsers, banAUser } from "@/store/actions/adminActions/adminActions";
 
 
 const INITIAL_STATE: AdminState = {
@@ -53,6 +53,32 @@ const adminSlice = createSlice({
                 state.error = null;
             })
             .addCase(authRequired.rejected, (state: AdminState, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+            // users-fetching
+            .addCase( getAllUsers.pending, (state: AdminState) => {
+                state.loading = true;
+            })
+            .addCase ( getAllUsers.fulfilled, (state: AdminState, action) => {
+                state.loading = false;
+                state.data = {...state.data, ...action.payload};
+                state.error = null;
+            })
+            .addCase ( getAllUsers.rejected, (state: AdminState, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+            // on ban of a user
+            .addCase( banAUser.pending, (state: AdminState) => {
+                state.loading = true;
+            })
+            .addCase ( banAUser.fulfilled, (state: AdminState, action) => {
+                state.loading = false;
+                state.data = {...state.data, ...action.payload};
+                state.error = null;
+            })
+            .addCase ( banAUser.rejected, (state: AdminState, action) => {
                 state.loading = false;
                 state.error = action.error.message;
             })

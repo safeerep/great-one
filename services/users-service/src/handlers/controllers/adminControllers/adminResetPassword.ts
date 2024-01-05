@@ -4,32 +4,32 @@ import sendEmail from "../../../utils/externalServices/nodemailer/sendResetPassw
 
 export = ( dependencies: any) => {
     const {
-        usecases: {
-            findExistingUser_usecase
+        adminUsecases: {
+            findAdmin_usecase
         }
     } = dependencies;
+    
     const sendEmailForResetPassword = async (req: Request, res: Response) => {
         const email: string = req.body.email;
-        console.log(req.body);
+        console.log(email);
         
         try {
-            // first we have to check is user existing?
-            const userData = await findExistingUser_usecase(dependencies).execute(email);
+            // first we have to check is it admin's email?
+            const adminData = await findAdmin_usecase(dependencies).execute(email);
             
-            // if there is no user with the email specified just return
-            if (!userData) return res.json({ success: false, message: "email is not registered with us"})
-            if (!userData.status) return res.json({ success: false, message: "you are blocked from this application"})
-            // if the user is existing see the next try catch block
+            // if there is no admin with the email specified just return
+            if (!adminData) return res.json({ success: false, message: "email is not registered with us"})
+            // if the admin is existing see the next try catch block
         } catch (error) {
             console.log(error);
             return res.status(503).json({ success: false, message: `something went wrong`})
         }
 
         try {
-            // user is existing so we have to send an email with a token to change password;
+            // admin is existing so we have to send an email with a token to change password;
             // for that, create token first with the email
             const token = await generateResetPasswordToken(email);
-            const link = 'change-password';
+            const link = 'admin/change-password';
             sendEmail(email, token, link).then(() => {
                 return res.json({ success: true, message: 'Check your inbox and update password' })
             }). catch((err) => {

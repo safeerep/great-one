@@ -51,6 +51,7 @@ export const login = createAsyncThunk('/user/login',
             })
             if (response) {
                 if (response.data.success) router.push('/')
+                else if (!response.data.success) setError(response?.data?.message)
             } else throw new Error(response?.data?.message)
         } catch (error: any) {
             // when response with status 401
@@ -139,7 +140,8 @@ export const sendEmailToResetPassword = createAsyncThunk('/user/send-email',
         } catch (error: any) {
             console.log('something went wrong', error);
         }
-    })
+    }
+)
 
 
 export const RequestToResetPassword = createAsyncThunk('/user/reset-password',

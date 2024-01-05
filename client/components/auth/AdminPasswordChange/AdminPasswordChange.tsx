@@ -7,7 +7,7 @@ import { RequestToResetPassword, checkAuth } from '@/store/actions/adminActions/
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { passwordValidationSchema } from '@/models/validationSchemas';
 
-const ChangePassword = () => {
+const AdminChangePassword = () => {
     const [error, setError] = useState();
     const [success, setSuccess] = useState();
     const dispatch:any = useDispatch()
@@ -75,4 +75,4 @@ const ChangePassword = () => {
     )
 }
 
-export default ChangePassword;
+export default AdminChangePassword;

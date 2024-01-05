@@ -41,6 +41,13 @@ export = ( dependencies: any) => {
         const userId = await getUserId(token);
         if (userId) {
             const userData = await findUserWithId_usecase(dependencies).execute(userId);
+            // now we want to check user status 
+            // if status is false - it means admin blocked this user
+            if (!userData.status) {
+              // we are clearing token of user
+              res.clearCookie("userJwt")
+              return res.json({ success: false, message: "You are now blocked from this application"})
+            }
             return res.json({ success: true, message: `user is authenticated`, userData})
         }
     } catch (error) {

@@ -1,31 +1,22 @@
 "use client"
 import AdminNavbar from '@/components/shared/adminSide/AdminNavbar'
 import AdminSidebar from '@/components/shared/adminSide/AdminSidebar';
-import { authRequired, banAUser, getAllUsers } from '@/store/actions/adminActions/adminActions';
+import { authRequired } from '@/store/actions/adminActions/adminActions';
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { FiUnlock, FiLock } from 'react-icons/fi';
 import { FaSlidersH } from 'react-icons/fa';
 import ConfimationModal from '@/components/Modals/ConfimationModal';
+import Link from 'next/link';
 
-const Home = () => {
+const Categories = () => {
   const dispatch: any = useDispatch();
   const router = useRouter()
-  const [modalOpen, setModalOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState()
 
   useEffect(() => {
     dispatch(authRequired(router))
-    dispatch(getAllUsers())
   }, [])
-
-  const blockOneUser = () => {
-    dispatch(banAUser({currentUser, setModalOpen}))
-  }
-
-  const users = useSelector((state: any) => state?.admin?.data?.users)
-  console.log(users)
 
   return (
     <>
@@ -33,7 +24,14 @@ const Home = () => {
       <div className="flex lg:flex-row md:flex-col sm:flex-col w-full px-2 p-2">
         <AdminSidebar />
         <div className="flex-grow">
-          <h1 className='text-xl p-3'> All users</h1>
+          <div className="flex justify-between w-full">
+            <h1 className='text-xl p-3'>Categories</h1>
+            <Link 
+                href={'/admin/categories/add-category'}
+                className='bg-slate-950 flex justify-center items-center text-white rounded-md px-3 h-10'>
+                Add Category
+            </Link>
+          </div>
           {/*  */}
           <div className="w-full flex justify-end px-3">
 
@@ -64,58 +62,50 @@ const Home = () => {
             </div> */}
             {/* item one ends here */}
           </div>
-          <table className="table border w-full overflow-scroll ps-2">
+          <table className="table border w-full overflow-scroll ms-2 ps-2">
             <thead>
               <tr>
-                <th className="border text-center">User Name</th>
-                <th className="border text-center">User Email</th>
-                <th className="border text-center">Phone</th>
-                <th className="border text-center">Status</th>
+                <th className="border text-center">Category Name</th>
+                <th className="border text-center">Active Status</th>
+                <th className="border text-center">Edit Category</th>
                 <th className="border text-center">Action</th>
               </tr>
             </thead>
             <tbody>
-              {users?.map((user: any) => (
-                (user &&
-                  <tr key={user._id}>
-                    <td className="border text-center">{user?.userName ? user?.userName : ''}</td>
-                    <td className="border text-center">{user?.email}</td>
-                    <td className="border text-center">{user?.phone ? user?.phone : ''}</td>
-                    <td className="border text-center">{user?.status ? 'Active' : 'Blocked'}</td>
+                
+                  <tr key='l'>
+                    <td className="border text-center"></td>
+                    <td className="border text-center"></td>
+                    <td className="border text-center"></td>
                     <td className="border flex justify-center items-center p-2">
-                      {user?.status ?
                         <button
                           onClick={() => {
-                            setCurrentUser(user);
-                            setModalOpen(true);
+                            
                           }}
                         >
                           <FiLock
                           />
-                        </button> :
+                        </button> 
                         <button
                           onClick={() => {
-                            setCurrentUser(user);
-                            setModalOpen(true)
+                            
                           }}
                         >
                           <FiUnlock />
                         </button>
-                      }
                     </td>
-                  </tr>)
-              ))}
+                  </tr>
             </tbody>
           </table>
         </div>
       </div>
       <ConfimationModal
-        afterConfirmation={blockOneUser}
-        isModalOpen={modalOpen}
-        setModalOpen={setModalOpen}
+        afterConfirmation={'blockOneUser'}
+        isModalOpen={false}
+        setModalOpen={'setModalOpen'}
       />
     </>
   )
 }
 
-export default Home
+export default Categories;

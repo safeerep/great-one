@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import Mailgen, { Content, ContentBody, Action } from "mailgen";
 
-const sendEmailForResetPassword = async (email: string, token: string) => {
+const sendEmailForResetPassword = async (email: string, token: string, link: string) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -15,7 +15,7 @@ const sendEmailForResetPassword = async (email: string, token: string) => {
     button: {
       color: "#22BC66",
       text: "Change Password",
-      link: `${process.env.CLIENT_URL}/change-password?me=${token}`,
+      link: `${process.env.CLIENT_URL}/${link}?me=${token}`,
     },
   };
 
