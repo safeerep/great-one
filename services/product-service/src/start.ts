@@ -4,6 +4,8 @@ import express, { Express, Request, Response } from "express";
 import session from 'express-session'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import { routes } from './adapters/routes';
+import dependencies from './utils/config/dependencies';
 
 const app: Express = express();
 const PORT: number = Number(process.env.PORT) || 3002;
@@ -27,7 +29,7 @@ app.get('/', (req: Request, res: Response) => {
     res.send('yes safeer product service is fine')
 })
 
-// app.use('/api/product')
+app.use('/api/product', routes(dependencies))
 
 app.listen( PORT, () => {
     console.log(`product-service is running at the port ${PORT}`);
