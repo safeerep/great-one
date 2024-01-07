@@ -17,9 +17,9 @@ export const findAdminWithEmail = async (email: string):Promise <IAdmin | boolea
 
 export const getAdminDataFromId = async (adminId: string):Promise <IAdmin | boolean> => {
     try {
-      const adminData = await adminCollection.findOne({ _id: adminId });
+      const adminData = await adminCollection.findOne({ _id: adminId });      
       if (!adminData) return false;
-      return adminData;
+      return adminData as IAdmin;
     } catch (error: any) {
       console.log(`here happened an error \n`, error);
       return false;

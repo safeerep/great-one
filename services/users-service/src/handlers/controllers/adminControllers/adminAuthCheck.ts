@@ -33,10 +33,9 @@ export = ( dependencies: any) => {
     }
     
     try {
-        // user is authenticated and we are needed to pass userdata
-        // first we want to get userId to fetch userdata
+        // admin is authenticated and we are needed to pass admindata
+        // first we want to get admin to fetch admindata
         const adminId = await getUserId(token);
-        console.log(adminId);
         
         if (adminId) {
             const adminData = await findAdminWithId_usecase(dependencies).execute(adminId);

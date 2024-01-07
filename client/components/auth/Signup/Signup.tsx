@@ -20,36 +20,16 @@ const Signup = () => {
     const [modalError, setModalError] = useState()
 
     const handleSubmit = (userCredentials: signUpCredentials) => {
-        dispatch(sendOtp({ email: userCredentials?.email, phone: Number(userCredentials?.phone) }))
-            .then((data: any) => {
-                if (data.payload.success) {
-                    setCredentials(userCredentials)
-                    setIsModalOpen(true);
-                }
-                else {
-                    setError(data.payload.message)
-                }
-            }).catch((err: any) => {
-                console.log(`an error occured ${err}`);
-            })
+        dispatch(sendOtp({ userCredentials, setError, setCredentials, setIsModalOpen}))
     }
 
     const handleOtpModalSubmit = (userData: signUpCredentials | null, otp: number) => {
-        const userDataWithOtp: any = { ...userData, otp };
-        dispatch(register(userDataWithOtp))
-            .then((data: any) => {
-                if (data.payload.success) {
-                    // close the modal
-                    setIsModalOpen(false);
-                    router.push('/')
-                }
-                else {
-                    // otp is not matching
-                    setModalError(data.payload.message)
-                }
-            }).catch((err: any) => {
-                console.log(`some error happened ${err}`);
-            })
+        console.log('in fun');
+        console.log(userData);
+        console.log(otp);
+        
+        const userCredentials: any = { ...userData, otp };
+        dispatch(register({ userCredentials, setIsModalOpen, router, setModalError}));
     };
 
     const handleGoogleAuth = () => {
@@ -143,6 +123,7 @@ const Signup = () => {
                 onClose={() => setIsModalOpen(false)}
                 onModalSubmit={handleOtpModalSubmit}
                 userData={credentials}
+                resendOtp={handleSubmit}
             />
         </>
     )

@@ -8,7 +8,7 @@ import { FaSlidersH } from 'react-icons/fa';
 import ConfimationModal from '@/components/Modals/ConfimationModal';
 import Link from 'next/link';
 
-const Categories = () => {
+const Products = () => {
   const dispatch: any = useDispatch();
   const router = useRouter()
 
@@ -19,11 +19,11 @@ const Categories = () => {
   return (
     <>
       <div className="flex justify-between w-full">
-        <h1 className='text-xl p-3'>Categories</h1>
+        <h1 className='text-xl p-3'>Products</h1>
         <Link
-          href={'/admin/categories/add-category'}
+          href={'/admin/categories/add-product'}
           className='bg-slate-950 flex justify-center items-center text-white rounded-md px-3 h-10'>
-          Add Category
+          Add Product
         </Link>
       </div>
       {/*  */}
@@ -59,15 +59,17 @@ const Categories = () => {
       <table className="table border w-full overflow-scroll ms-2 ps-2">
         <thead>
           <tr>
+            <th className="border text-center">Product Name</th>
             <th className="border text-center">Category Name</th>
+            <th className="border text-center">User Name</th>
             <th className="border text-center">Active Status</th>
-            <th className="border text-center">Edit Category</th>
-            <th className="border text-center">Action</th>
+            <th className="border text-center">Block Product</th>
           </tr>
         </thead>
         <tbody>
 
           <tr key='l'>
+            <td className="border text-center"></td>
             <td className="border text-center"></td>
             <td className="border text-center"></td>
             <td className="border text-center"></td>
@@ -101,4 +103,4 @@ const Categories = () => {
   )
 }
 
-export default Categories;
+export default Products;

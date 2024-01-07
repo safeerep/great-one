@@ -63,7 +63,9 @@ export const userLogin = async (
 
 export const storeOtp = async (email: string, otp: number): Promise<void> => {
   try {
-    await otpCollection.create({ email, otp });
+    // making upert true because if otp is existing, it should update
+    // other wise, it will create new one document; 
+    await otpCollection.findOneAndUpdate({ email: email}, { otp: otp}, { upsert: true})
   } catch (error: any) {
     if (error.code === 11000)
       console.log(`already an otp is there which is not expired`);

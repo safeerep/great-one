@@ -4,19 +4,35 @@ import { signUpCredentialsWithOtp, signInCredentials } from "@/types/user";
 import { USERS_SERVICE_BASE_URL } from '../../../constants/index'
 
 
-export const register = createAsyncThunk('/user/register', async (userCredentials: signUpCredentialsWithOtp) => {
+export const register = createAsyncThunk('/user/register', async ({userCredentials, setIsModalOpen, router, setModalError}:
+    {userCredentials: signUpCredentialsWithOtp, setIsModalOpen: any, router: any, setModalError: any}) => {
     try {
         const response: any = await axios.post(`${USERS_SERVICE_BASE_URL}/user/signup`, { ...userCredentials }, {
             headers: { "Content-Type": "application/json" },
             withCredentials: true
         })
         if (response) {
+            console.log('hey ');
+            console.log(response);
+            
+            if (response?.data?.success) {
+                // close the modal
+                setModalError(response?.data?.message)
+                setIsModalOpen(false);
+                router.push('/')
+            }
+            else {
+                // otp is not matching
+                setModalError(response?.data?.message)
+            }
             return response.data;
         } else {
             throw new Error(response?.data?.message)
         }
     } catch (error: any) {
         // when response with status 401
+        console.log(error?.response?.data?.message);
+        setModalError(error?.response?.data?.message)
         return {
             message: 'otp is not matching'
         }
@@ -24,22 +40,31 @@ export const register = createAsyncThunk('/user/register', async (userCredential
 })
 
 
-export const sendOtp = createAsyncThunk('/user/send-otp-for-signup', async ({ email, phone }: { email: string, phone: number }) => {
-    try {
-        const response: any = await axios.post(`${USERS_SERVICE_BASE_URL}/user/send-otp-for-signup`, { email, phone }, {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true
-        })
-        if (response?.data) {
-            console.log(response?.data);
-            return response?.data;
-        } else {
-            throw new Error(response?.data?.message)
+export const sendOtp = createAsyncThunk('/user/send-otp-for-signup',
+    async ({ userCredentials, setError, setCredentials, setIsModalOpen }: { userCredentials: any, setError: any, setCredentials: any, setIsModalOpen: any }) => {
+        try {
+            const response: any = await axios.post(`${USERS_SERVICE_BASE_URL}/user/send-otp-for-signup`, { ...userCredentials }, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true
+            })
+            if (response?.data) {
+                if (response?.data?.success) {
+                    setError()
+                    setCredentials(userCredentials)
+                    setIsModalOpen(true);
+                }
+                else {
+                    setError(response?.data?.message)
+                }
+                console.log(response?.data);
+                return response?.data;
+            } else {
+                throw new Error(response?.data?.message)
+            }
+        } catch (error: any) {
+            throw new Error(error.message)
         }
-    } catch (error: any) {
-        throw new Error(error.message)
-    }
-})
+    })
 
 
 export const login = createAsyncThunk('/user/login',
@@ -59,7 +84,7 @@ export const login = createAsyncThunk('/user/login',
             setError(error?.response?.data?.message)
             return error.response.data
         }
-})
+    })
 
 export const checkAuth = createAsyncThunk('/user/check-auth', async (router: any) => {
     try {

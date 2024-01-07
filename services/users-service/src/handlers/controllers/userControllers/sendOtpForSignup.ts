@@ -33,7 +33,9 @@ export = ( dependencies: any): any => {
             const otp =  Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
             const sentSuccessfully: boolean | any = sendOtp( otp, email)
 
-            storeOtp_usecase(dependencies).execute(email, otp)
+            const otpStored = await storeOtp_usecase(dependencies).execute(email, otp)
+            console.log('stored',otpStored);
+            
 
             if (sentSuccessfully) return res.json({ success: true, message: 'otp sent successfully through email'})
             return res.json({ success: false, message: "something went wrong"})

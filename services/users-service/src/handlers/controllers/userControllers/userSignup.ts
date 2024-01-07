@@ -13,6 +13,8 @@ export = (dependencies: any): any => {
     res: Response,
     next: NextFunction
   ) => {
+    console.log('here ok');
+    
     const userCredentials = req.body;
     console.log(userCredentials);
     try {
