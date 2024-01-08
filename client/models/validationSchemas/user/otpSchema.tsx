@@ -1,9 +1,10 @@
 import * as Yup from 'yup';
 
 const otpValidationSchema = Yup.object().shape({
-    otp: Yup.string()  // Use Yup.string() for length validation
+    // here using string for length validation
+    otp: Yup.string()  
     .required("OTP is required")
-    .matches(/^\d{4}$/, "OTP should be exactly 4 characters")
+    .matches(/^[0-9]{4}$/, "OTP should be exactly 4 digits")
 });
 
 export default otpValidationSchema;

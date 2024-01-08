@@ -7,7 +7,8 @@ const signupValidationSchema = Yup.object().shape({
     email: Yup.string()
         .email()
         .required("Email is required"),
-    phone: Yup.number()
+        // using string for length validation
+    phone: Yup.string()
         .min(10, 'Phone number should contain atleast 10 numbers'),
     password: Yup.string()
         .required("Password is required")
