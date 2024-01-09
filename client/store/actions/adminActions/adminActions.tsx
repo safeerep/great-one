@@ -191,7 +191,7 @@ export const addCategory = createAsyncThunk('/admin/add-category', async ({ rout
 })
 
 export const changeCategoryStatus = createAsyncThunk('/admin/change-category-status',
-    async ({ categoryId, setModalState, setErrorState }: { categoryId: string | undefined, setModalState: any, setErrorState: any }) => {
+    async ({ categoryId, setModalState }: { categoryId: string | undefined, setModalState: any}) => {
         try {
             const response = await axios.patch(`${PRODUCT_SERVICE_BASE_URL}/admin/change-category-status`,
                 { categoryId }, {
@@ -203,10 +203,10 @@ export const changeCategoryStatus = createAsyncThunk('/admin/change-category-sta
                     toast.success('successfully updated category status')
                     setModalState(false)
                 }
-                else setErrorState(response.data?.message)
+                else toast.error(response.data.message?response.data.message:"something went wrong")
             }
-        } catch (error) {
-
+        } catch ( error: any) {
+            toast.error(error?.response?.data?.message?error?.response?.data?.message:"something went wrong")
         }
     }
 )

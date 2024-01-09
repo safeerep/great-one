@@ -11,16 +11,16 @@ import Link from 'next/link';
 const Categories = () => {
   const dispatch: any = useDispatch();
   const router = useRouter()
-  const [modalState, setModalState] = useState();
-  const [errorState, setErrorState] = useState();
-  const [categoryId, setCategoryId] = useState<string>();
+  const [modalState, setModalState] = useState(false);
+  const [categoryId, setCategoryId] = useState<string>('');
 
   useEffect(() => {
     dispatch(authRequired(router))
   }, [])
 
   const changeStatus = () => {
-    dispatch(changeCategoryStatus({ categoryId, setModalState, setErrorState }))
+    console.log('called for change status');
+    dispatch(changeCategoryStatus({ categoryId, setModalState }))
   }
 
   return (
@@ -81,6 +81,7 @@ const Categories = () => {
             <td className="border flex justify-center items-center p-2">
               <button
                 onClick={() => {
+                  setModalState(true)
                   setCategoryId('categoryId')
                 }}
               >
@@ -89,7 +90,8 @@ const Categories = () => {
               </button>
               <button
                 onClick={() => {
-                  setCategoryId('categoryId')
+                  setModalState(true)
+                  setCategoryId('helloo')
                 }}
               >
                 <FiUnlock />
@@ -101,7 +103,7 @@ const Categories = () => {
 
       <ConfimationModal
         afterConfirmation={changeStatus}
-        isModalOpen={false}
+        isModalOpen={modalState}
         setModalOpen={setModalState}
       />
     </>
