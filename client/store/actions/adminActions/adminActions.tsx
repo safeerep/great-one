@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import axios from "axios"
-import { USERS_SERVICE_BASE_URL } from "@/constants"
+import { USERS_SERVICE_BASE_URL, PRODUCT_SERVICE_BASE_URL } from "@/constants"
 import { signInCredentials } from "@/types/admin"
 import { Toaster, toast } from "react-hot-toast"
 
@@ -21,7 +21,7 @@ export const login = createAsyncThunk('/admin/login',
             setError(error?.response?.data?.message)
             return error.response.data
         }
-})
+    })
 
 export const checkAuth = createAsyncThunk('/admin/check-auth', async (router: any) => {
     try {
@@ -31,7 +31,7 @@ export const checkAuth = createAsyncThunk('/admin/check-auth', async (router: an
         })
         if (response?.data) {
             console.log(response.data);
-            
+
             if (response.data.success) router.push('/admin')
             return response.data;
         } else {
@@ -90,8 +90,8 @@ export const getAllUsers = createAsyncThunk('/admin/get-all-users', async () => 
         })
         if (response?.data) {
             console.log(response.data);
-            if (response.data.success) 
-            return response.data;
+            if (response.data.success)
+                return response.data;
         } else {
             throw new Error(response?.data?.message)
         }
@@ -100,14 +100,14 @@ export const getAllUsers = createAsyncThunk('/admin/get-all-users', async () => 
     }
 })
 
-export const banAUser = createAsyncThunk('/admin/ban-user', async ( {currentUser, setModalOpen}:{currentUser: any, setModalOpen: any}) => {
+export const banAUser = createAsyncThunk('/admin/ban-user', async ({ currentUser, setModalOpen }: { currentUser: any, setModalOpen: any }) => {
     try {
-        const response: any = await axios.patch(`${USERS_SERVICE_BASE_URL}/admin/change-user-status`,{ ...currentUser }, {
+        const response: any = await axios.patch(`${USERS_SERVICE_BASE_URL}/admin/change-user-status`, { ...currentUser }, {
             headers: { "Content-Type": "application/json" },
             withCredentials: true
         })
         if (response?.data) {
-            if (response.data?.success){ 
+            if (response.data?.success) {
                 toast.success('successfully changed user status')
                 setModalOpen(false)
             }
@@ -116,7 +116,7 @@ export const banAUser = createAsyncThunk('/admin/ban-user', async ( {currentUser
         };
     } catch (error) {
         console.log(`somenthing went wrong`);
-        
+
     }
 })
 
@@ -146,7 +146,7 @@ export const sendEmailToResetPassword = createAsyncThunk('/admin/send-email',
 )
 
 export const RequestToResetPassword = createAsyncThunk('/admin/reset-password',
-    async ({ passwords, token, setSuccess, setError, router }: 
+    async ({ passwords, token, setSuccess, setError, router }:
         { passwords: any, token: string, setSuccess: any, setError: any, router: any }) => {
         try {
             const response: any = await axios.post(`${USERS_SERVICE_BASE_URL}/admin/change-password`,
@@ -169,6 +169,44 @@ export const RequestToResetPassword = createAsyncThunk('/admin/reset-password',
             else throw new Error('something went wrong')
         } catch (error: any) {
             console.log('something went wrong', error);
+        }
+    }
+)
+
+export const addCategory = createAsyncThunk('/admin/add-category', async ({ router, categoryDetails }: { router: any, categoryDetails: any }) => {
+    try {
+        const response = await axios.post(`${PRODUCT_SERVICE_BASE_URL}/admin/add-category`,
+            {
+                ...categoryDetails
+            }, {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true
+        })
+        if (response.data) {
+            console.log(response.data);
+        } else throw new Error('something went wrong')
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+export const changeCategoryStatus = createAsyncThunk('/admin/change-category-status',
+    async ({ categoryId, setModalState, setErrorState }: { categoryId: string | undefined, setModalState: any, setErrorState: any }) => {
+        try {
+            const response = await axios.patch(`${PRODUCT_SERVICE_BASE_URL}/admin/change-category-status`,
+                { categoryId }, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true
+            })
+            if (response.data) {
+                if (response.data.success) {
+                    toast.success('successfully updated category status')
+                    setModalState(false)
+                }
+                else setErrorState(response.data?.message)
+            }
+        } catch (error) {
+
         }
     }
 )

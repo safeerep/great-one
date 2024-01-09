@@ -9,9 +9,9 @@ const categoryFieldValidationSchema = Yup.object().shape({
     ),
     checkBoxFields: Yup.array().of(
         Yup.object().shape({
-            label: Yup.string(),
+            label: Yup.string().required("label is required for check box fields"),
             options: Yup.string().matches(
-                /^([^,]+,[^,]+)(,[^,]+)*$/, "options for the check box field should be atleast two"
+                /^[^,]+,[^,]+(?:,[^,]+)*$/, "options for the check box field should be atleast two"
             )
         })
     ),

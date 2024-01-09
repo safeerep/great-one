@@ -1,5 +1,5 @@
 "use client"
-import { authRequired } from '@/store/actions/adminActions/adminActions';
+import { authRequired, changeCategoryStatus } from '@/store/actions/adminActions/adminActions';
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -11,10 +11,17 @@ import Link from 'next/link';
 const Categories = () => {
   const dispatch: any = useDispatch();
   const router = useRouter()
+  const [modalState, setModalState] = useState();
+  const [errorState, setErrorState] = useState();
+  const [categoryId, setCategoryId] = useState<string>();
 
   useEffect(() => {
     dispatch(authRequired(router))
   }, [])
+
+  const changeStatus = () => {
+    dispatch(changeCategoryStatus({ categoryId, setModalState, setErrorState }))
+  }
 
   return (
     <>
@@ -66,7 +73,7 @@ const Categories = () => {
           </tr>
         </thead>
         <tbody>
-
+          {/* {categori} */}
           <tr key='l'>
             <td className="border text-center"></td>
             <td className="border text-center"></td>
@@ -74,7 +81,7 @@ const Categories = () => {
             <td className="border flex justify-center items-center p-2">
               <button
                 onClick={() => {
-
+                  setCategoryId('categoryId')
                 }}
               >
                 <FiLock
@@ -82,7 +89,7 @@ const Categories = () => {
               </button>
               <button
                 onClick={() => {
-
+                  setCategoryId('categoryId')
                 }}
               >
                 <FiUnlock />
@@ -93,9 +100,9 @@ const Categories = () => {
       </table>
 
       <ConfimationModal
-        afterConfirmation={'blockOneUser'}
+        afterConfirmation={changeStatus}
         isModalOpen={false}
-        setModalOpen={'setModalOpen'}
+        setModalOpen={setModalState}
       />
     </>
   )
